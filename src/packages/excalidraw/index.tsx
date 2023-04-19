@@ -246,4 +246,4 @@ export { MainMenu };
 export { useDevice } from "../../components/App";
 export { WelcomeScreen };
 export { LiveCollaborationTrigger };
-export default ExcalidrawApp;
+export { ExcalidrawApp };

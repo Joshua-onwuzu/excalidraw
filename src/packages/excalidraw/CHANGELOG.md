@@ -11,7 +11,7 @@ The change should be grouped under one of the below section and must contain PR 
 Please add the latest change on the top under the correct section.
 -->
 
-## Unreleased
+## 0.1.0 (2023-04-19)
 
 ### Docs
 
@@ -1166,6 +1166,11 @@ Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/
 
 - Update the homepage URL so it redirects to correct readme [#2498](https://github.com/excalidraw/excalidraw/pull/2498)
 
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.1.0
 
 First release of `@excalidraw/excalidraw`

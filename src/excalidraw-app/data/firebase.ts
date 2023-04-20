@@ -88,10 +88,13 @@ const loadFirestore = async () => {
 export const loadFirebaseStorage = async () => {
   const firebase = await _getFirebase();
   if (!firebaseStoragePromise) {
+    console.log("hitting load gth")
     firebaseStoragePromise = import(
       /* webpackChunkName: "storage" */ "firebase/storage"
     );
+    console.log("kolopiuyt")
   }
+  console.log("youtube")
   if (firebaseStoragePromise !== true) {
     await firebaseStoragePromise;
     firebaseStoragePromise = true;

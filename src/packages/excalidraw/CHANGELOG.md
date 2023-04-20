@@ -940,6 +940,11 @@ Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/
 
 ---
 
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.4.1
 
 ## Excalidraw API

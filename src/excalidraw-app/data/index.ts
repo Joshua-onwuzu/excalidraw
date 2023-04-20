@@ -142,13 +142,15 @@ export const isCollaborationLink = (link: string) => {
 };
 
 export const getCollaborationLinkData = (link: string) => {
-  const hash = new URL(link).hash;
-  const match = hash.match(RE_COLLAB_LINK);
-  if (match && match[2].length !== 22) {
-    window.alert(t("alerts.invalidEncryptionKey"));
-    return null;
+  const formatedLink = link.replace("/#", "");
+  const linkSearchParams = new URL(formatedLink).searchParams;
+  const roomId = linkSearchParams.get("roomId");
+  const roomKey = linkSearchParams.get("roomKey");
+
+  if (roomId && roomKey) {
+    return { roomId, roomKey };
   }
-  return match ? { roomId: match[1], roomKey: match[2] } : null;
+  return null;
 };
 
 export const generateCollaborationLinkData = async () => {
@@ -166,7 +168,7 @@ export const getCollaborationLink = (data: {
   roomId: string;
   roomKey: string;
 }) => {
-  return `?room=${data.roomId},${data.roomKey}`;
+  return `&roomId=${data.roomId}&roomKey=${data.roomKey}`;
 };
 
 /**

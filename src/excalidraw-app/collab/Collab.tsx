@@ -396,7 +396,7 @@ class Collab extends PureComponent<Props, CollabState> {
       window.history.pushState(
         {},
         APP_NAME,
-        getCollaborationLink({ roomId, roomKey }),
+        `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
       );
     }
 
@@ -406,9 +406,6 @@ class Collab extends PureComponent<Props, CollabState> {
     this.setIsCollaborating(true);
     LocalData.pauseSave("collaboration");
     console.log("about to import socket client");
-    // const { default: socketIOClient } = await import(
-    //   /* webpackChunkName: "socketIoClient" */ "socket.io-client"
-    // );
     console.log("after socket io");
     const fallbackInitializationHandler = () => {
       this.initializeRoom({

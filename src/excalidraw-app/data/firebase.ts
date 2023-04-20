@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ExcalidrawElement, FileId } from "../../element/types";
 import { getSceneVersion } from "../../element";
 import Portal from "../collab/Portal";
@@ -223,12 +224,13 @@ export const saveToFirebase = async (
   ) {
     return false;
   }
-
+console.log("step 1")
   const firebase = await loadFirestore();
   const firestore = firebase.firestore();
+  console.log("step 2")
 
   const docRef = firestore.collection("scenes").doc(roomId);
-
+  console.log("step 3")
   const savedData = await firestore.runTransaction(async (transaction) => {
     const snapshot = await transaction.get(docRef);
 

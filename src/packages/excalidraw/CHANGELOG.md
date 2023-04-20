@@ -961,6 +961,11 @@ Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/
 - Cursor being leaked outside of canvas [#3161](https://github.com/excalidraw/excalidraw/pull/3161).
 - Hide scrollbars in zenMode [#3144](https://github.com/excalidraw/excalidraw/pull/3144).
 
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.4.0
 
 ## Excalidraw API

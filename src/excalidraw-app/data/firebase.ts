@@ -38,9 +38,12 @@ let firebaseStoragePromise: Promise<any> | null | true = null;
 let isFirebaseInitialized = false;
 
 const _loadFirebase = async () => {
+  console.log("shift 1")
   const firebase = (
     await import(/* webpackChunkName: "firebase" */ "firebase/app")
   ).default;
+
+  console.log("shift 2")
 
   if (!isFirebaseInitialized) {
     try {

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import throttle from "lodash.throttle";
 import { PureComponent } from "react";
 import { ExcalidrawImperativeAPI } from "../../types";
@@ -399,14 +400,15 @@ class Collab extends PureComponent<Props, CollabState> {
     }
 
     const scenePromise = resolvablePromise<ImportedDataState | null>();
+    console.log(scenePromise, "hitting here");
 
     this.setIsCollaborating(true);
     LocalData.pauseSave("collaboration");
-
+    console.log("about to import socket client");
     const { default: socketIOClient } = await import(
       /* webpackChunkName: "socketIoClient" */ "socket.io-client"
     );
-
+    console.log("after socket io");
     const fallbackInitializationHandler = () => {
       this.initializeRoom({
         roomLinkData: existingRoomLinkData,

@@ -16,7 +16,7 @@ import { MIME_TYPES } from "../../constants";
 import { reconcileElements } from "../collab/reconciliation";
 import { getSyncableElements, SyncableExcalidrawElement } from ".";
 import { ResolutionType } from "../../utility-types";
-import fb from 'firebase/app'
+import fb from "firebase/app";
 
 // private
 // -----------------------------------------------------------------------------
@@ -39,12 +39,14 @@ let firebaseStoragePromise: Promise<any> | null | true = null;
 let isFirebaseInitialized = false;
 
 const _loadFirebase = async () => {
-  console.log("coooll")
+  console.log("coooll");
   const firebase = fb;
-  console.log("yetttt")
+  console.log("yetttt");
   if (!isFirebaseInitialized) {
     try {
+      console.log("brim");
       firebase.initializeApp(FIREBASE_CONFIG);
+      console.log("kobbbbbba");
     } catch (error: any) {
       // trying initialize again throws. Usually this is harmless, and happens
       // mainly in dev (HMR)
@@ -73,6 +75,7 @@ const _getFirebase = async (): Promise<
 
 const loadFirestore = async () => {
   const firebase = await _getFirebase();
+  console.log("pop");
   if (!firestorePromise) {
     firestorePromise = import(
       /* webpackChunkName: "firestore" */ "firebase/firestore"
@@ -88,13 +91,13 @@ const loadFirestore = async () => {
 export const loadFirebaseStorage = async () => {
   const firebase = await _getFirebase();
   if (!firebaseStoragePromise) {
-    console.log("hitting load gth")
+    console.log("hitting load gth");
     firebaseStoragePromise = import(
       /* webpackChunkName: "storage" */ "firebase/storage"
     );
-    console.log("kolopiuyt")
+    console.log("kolopiuyt");
   }
-  console.log("")
+  console.log("");
   if (firebaseStoragePromise !== true) {
     await firebaseStoragePromise;
     firebaseStoragePromise = true;
@@ -227,13 +230,13 @@ export const saveToFirebase = async (
   ) {
     return false;
   }
-console.log("step 1")
+  console.log("step 1");
   const firebase = await loadFirestore();
   const firestore = firebase.firestore();
-  console.log("step 2")
+  console.log("step 2");
 
   const docRef = firestore.collection("scenes").doc(roomId);
-  console.log("step 3")
+  console.log("step 3");
   const savedData = await firestore.runTransaction(async (transaction) => {
     const snapshot = await transaction.get(docRef);
 

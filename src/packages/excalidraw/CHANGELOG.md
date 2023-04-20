@@ -1003,6 +1003,11 @@ Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/
 
 - Allow to toggle between modes when view only mode to make UI consistent [#3009](https://github.com/excalidraw/excalidraw/pull/3009)
 
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.3.0
 
 ## Excalidraw API

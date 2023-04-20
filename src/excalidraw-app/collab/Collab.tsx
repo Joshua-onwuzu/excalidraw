@@ -242,16 +242,20 @@ class Collab extends PureComponent<Props, CollabState> {
     syncableElements: readonly SyncableExcalidrawElement[],
   ) => {
     try {
+      console.log("hitting  saving firebase")
       const savedData = await saveToFirebase(
         this.portal,
         syncableElements,
         this.excalidrawAPI.getAppState(),
       );
+      console.log("done hitting firebase")
 
       if (this.isCollaborating() && savedData && savedData.reconciledElements) {
+        console.log("gummmyt")
         this.handleRemoteSceneUpdate(
           this.reconcileElements(savedData.reconciledElements),
         );
+        console.log("kollllo")
       }
     } catch (error: any) {
       this.setState({

@@ -15,7 +15,6 @@ import { MIME_TYPES } from "../../constants";
 import { reconcileElements } from "../collab/reconciliation";
 import { getSyncableElements, SyncableExcalidrawElement } from ".";
 import { ResolutionType } from "../../utility-types";
-import fireStore from 'firebase/firestore'
 
 // private
 // -----------------------------------------------------------------------------
@@ -74,7 +73,7 @@ const _getFirebase = async (): Promise<
 const loadFirestore = async () => {
   const firebase = await _getFirebase();
   if (!firestorePromise) {
-    firestorePromise = await import(
+    firestorePromise = import(
       /* webpackChunkName: "firestore" */ "firebase/firestore"
     );
   }
@@ -88,7 +87,7 @@ const loadFirestore = async () => {
 export const loadFirebaseStorage = async () => {
   const firebase = await _getFirebase();
   if (!firebaseStoragePromise) {
-    firebaseStoragePromise = await import(
+    firebaseStoragePromise = import(
       /* webpackChunkName: "storage" */ "firebase/storage"
     );
   }

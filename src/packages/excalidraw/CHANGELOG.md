@@ -989,6 +989,11 @@ Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/
 
 - Hide scrollbars on mobile [#3044](https://github.com/excalidraw/excalidraw/pull/3044)
 
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.3.1
 
 ## Excalidraw API

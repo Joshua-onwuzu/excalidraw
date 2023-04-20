@@ -168,7 +168,7 @@ export const getCollaborationLink = (data: {
   roomId: string;
   roomKey: string;
 }) => {
-  return `&roomId=${data.roomId}&roomKey=${data.roomKey}`;
+  return `?roomId=${data.roomId}&roomKey=${data.roomKey}`;
 };
 
 /**

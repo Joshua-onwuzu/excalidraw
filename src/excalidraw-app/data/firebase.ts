@@ -16,6 +16,7 @@ import { MIME_TYPES } from "../../constants";
 import { reconcileElements } from "../collab/reconciliation";
 import { getSyncableElements, SyncableExcalidrawElement } from ".";
 import { ResolutionType } from "../../utility-types";
+import fb from 'firebase/app'
 
 // private
 // -----------------------------------------------------------------------------
@@ -38,13 +39,9 @@ let firebaseStoragePromise: Promise<any> | null | true = null;
 let isFirebaseInitialized = false;
 
 const _loadFirebase = async () => {
-  console.log("shift 1")
-  const firebase = (
-    await import(/* webpackChunkName: "firebase" */ "firebase/app")
-  ).default;
-
-  console.log("shift 2")
-
+  console.log("coooll")
+  const firebase = fb;
+  console.log("yetttt")
   if (!isFirebaseInitialized) {
     try {
       firebase.initializeApp(FIREBASE_CONFIG);
@@ -97,7 +94,7 @@ export const loadFirebaseStorage = async () => {
     );
     console.log("kolopiuyt")
   }
-  console.log("youtube")
+  console.log("")
   if (firebaseStoragePromise !== true) {
     await firebaseStoragePromise;
     firebaseStoragePromise = true;

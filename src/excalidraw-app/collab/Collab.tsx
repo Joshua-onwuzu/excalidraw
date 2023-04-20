@@ -5,6 +5,7 @@ import { ExcalidrawImperativeAPI } from "../../types";
 import { ErrorDialog } from "../../components/ErrorDialog";
 import { APP_NAME, ENV, EVENT } from "../../constants";
 import { ImportedDataState } from "../../data/types";
+import socketIOClient from "socket.io-client";
 import {
   ExcalidrawElement,
   InitializedExcalidrawImageElement,
@@ -405,9 +406,9 @@ class Collab extends PureComponent<Props, CollabState> {
     this.setIsCollaborating(true);
     LocalData.pauseSave("collaboration");
     console.log("about to import socket client");
-    const { default: socketIOClient } = await import(
-      /* webpackChunkName: "socketIoClient" */ "socket.io-client"
-    );
+    // const { default: socketIOClient } = await import(
+    //   /* webpackChunkName: "socketIoClient" */ "socket.io-client"
+    // );
     console.log("after socket io");
     const fallbackInitializationHandler = () => {
       this.initializeRoom({

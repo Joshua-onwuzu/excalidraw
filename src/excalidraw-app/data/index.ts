@@ -146,8 +146,9 @@ export const getCollaborationLinkData = (link: string) => {
   const linkSearchParams = new URL(formatedLink).searchParams;
   const roomId = linkSearchParams.get("roomId");
   const roomKey = linkSearchParams.get("roomKey");
+  const isCollaborating = linkSearchParams.get("collab");
 
-  if (roomId && roomKey) {
+  if (roomId && roomKey && isCollaborating === "true") {
     return { roomId, roomKey };
   }
   return null;
@@ -168,7 +169,7 @@ export const getCollaborationLink = (data: {
   roomId: string;
   roomKey: string;
 }) => {
-  return `?roomId=${data.roomId}&roomKey=${data.roomKey}`;
+  return `?roomId=${data.roomId}&roomKey=${data.roomKey}&collab=true`;
 };
 
 /**

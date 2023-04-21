@@ -152,7 +152,7 @@ export const getRoomIdAndKeyFromLink = (link: string) => {
   const roomId = url.pathname
     .substring(url.pathname.lastIndexOf("/"))
     .replace("/", "");
-  const roomKey = urlSearchParams.get("key");
+  const roomKey = urlSearchParams.get("roomkey");
   const isCollaborating = urlSearchParams.get("collab");
   return { roomId, roomKey, isCollaborating };
 };
@@ -171,7 +171,8 @@ export const getCollaborationLinkData = (link: string) => {
 export const generateCollaborationLinkData = async () => {
   const link = window.location.href;
   const formatedLink = getLinkFormatedUrl(link);
-  const { roomId, roomKey } = getRoomIdAndKeyFromLink(formatedLink);
+  const { roomId } = getRoomIdAndKeyFromLink(formatedLink);
+  const roomKey = await generateEncryptionKey();
 
   if (!roomKey || !roomId) {
     throw new Error("Couldn't generate room key");
@@ -184,7 +185,7 @@ export const getCollaborationLink = (data: {
   roomId: string;
   roomKey: string;
 }) => {
-  return `?roomId=${data.roomId}&roomKey=${data.roomKey}&collab=true`;
+  return `&roomKey=${data.roomKey}&collab=true`;
 };
 
 /**

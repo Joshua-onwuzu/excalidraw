@@ -400,7 +400,7 @@ class Collab extends PureComponent<Props, CollabState> {
       window.history.pushState(
         {},
         APP_NAME,
-        `${window.location.href}&collab=true`,
+        `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
       );
     }
 

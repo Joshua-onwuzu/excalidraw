@@ -400,7 +400,7 @@ class Collab extends PureComponent<Props, CollabState> {
       window.history.pushState(
         {},
         APP_NAME,
-        `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
+        `${window.location.href}&collab=true`,
       );
     }
 
@@ -423,13 +423,6 @@ class Collab extends PureComponent<Props, CollabState> {
 
     try {
       const socketServerData = await getCollabServer();
-
-      // eslint-disable-next-line no-console
-      console.log(
-        { socketServerData, socketIOClient },
-        typeof socketIOClient,
-        "its type",
-      );
 
       this.portal.socket = this.portal.open(
         socketIOClient(socketServerData.url, {

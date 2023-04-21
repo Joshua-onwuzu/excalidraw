@@ -141,12 +141,26 @@ export const isCollaborationLink = (link: string) => {
   return RE_COLLAB_LINK.test(hash);
 };
 
+export const getLinkFormatedUrl = (link: string) => {
+  const formatedLink = link.replace("/#", "");
+  return formatedLink;
+};
+
+export const getRoomIdAndKeyFromLink = (link: string) => {
+  const url = new URL(link);
+  const urlSearchParams = url.searchParams;
+  const roomId = url.pathname
+    .substring(url.pathname.lastIndexOf("/"))
+    .replace("/", "");
+  const roomKey = urlSearchParams.get("key");
+  const isCollaborating = urlSearchParams.get("collab");
+  return { roomId, roomKey, isCollaborating };
+};
+
 export const getCollaborationLinkData = (link: string) => {
   const formatedLink = link.replace("/#", "");
-  const linkSearchParams = new URL(formatedLink).searchParams;
-  const roomId = linkSearchParams.get("roomId");
-  const roomKey = linkSearchParams.get("roomKey");
-  const isCollaborating = linkSearchParams.get("collab");
+  const { roomId, roomKey, isCollaborating } =
+    getRoomIdAndKeyFromLink(formatedLink);
 
   if (roomId && roomKey && isCollaborating === "true") {
     return { roomId, roomKey };
@@ -155,10 +169,11 @@ export const getCollaborationLinkData = (link: string) => {
 };
 
 export const generateCollaborationLinkData = async () => {
-  const roomId = await generateRoomId();
-  const roomKey = await generateEncryptionKey();
+  const link = window.location.href;
+  const formatedLink = getLinkFormatedUrl(link);
+  const { roomId, roomKey } = getRoomIdAndKeyFromLink(formatedLink);
 
-  if (!roomKey) {
+  if (!roomKey || !roomId) {
     throw new Error("Couldn't generate room key");
   }
 

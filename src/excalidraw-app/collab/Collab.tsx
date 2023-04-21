@@ -232,52 +232,52 @@ class Collab extends PureComponent<Props, CollabState> {
     ) {
       // this won't run in time if user decides to leave the site, but
       //  the purpose is to run in immediately after user decides to stay
-      this.saveCollabRoomToFirebase(syncableElements);
+      // this.saveCollabRoomToFirebase(syncableElements);
 
       preventUnload(event);
     }
   });
 
-  saveCollabRoomToFirebase = async (
-    syncableElements: readonly SyncableExcalidrawElement[],
-  ) => {
-    try {
-      console.log("hitting  saving firebase")
-      const savedData = await saveToFirebase(
-        this.portal,
-        syncableElements,
-        this.excalidrawAPI.getAppState(),
-      );
-      console.log("done hitting firebase")
+  // saveCollabRoomToFirebase = async (
+  //   syncableElements: readonly SyncableExcalidrawElement[],
+  // ) => {
+  //   try {
+  //     console.log("hitting  saving firebase")
+  //     const savedData = await saveToFirebase(
+  //       this.portal,
+  //       syncableElements,
+  //       this.excalidrawAPI.getAppState(),
+  //     );
+  //     console.log("done hitting firebase")
 
-      if (this.isCollaborating() && savedData && savedData.reconciledElements) {
-        console.log("gummmyt")
-        this.handleRemoteSceneUpdate(
-          this.reconcileElements(savedData.reconciledElements),
-        );
-        console.log("kollllo")
-      }
-    } catch (error: any) {
-      this.setState({
-        // firestore doesn't return a specific error code when size exceeded
-        errorMessage: /is longer than.*?bytes/.test(error.message)
-          ? t("errors.collabSaveFailed_sizeExceeded")
-          : t("errors.collabSaveFailed"),
-      });
-      console.error(error);
-    }
-  };
+  //     if (this.isCollaborating() && savedData && savedData.reconciledElements) {
+  //       console.log("gummmyt")
+  //       this.handleRemoteSceneUpdate(
+  //         this.reconcileElements(savedData.reconciledElements),
+  //       );
+  //       console.log("kollllo")
+  //     }
+  //   } catch (error: any) {
+  //     this.setState({
+  //       // firestore doesn't return a specific error code when size exceeded
+  //       errorMessage: /is longer than.*?bytes/.test(error.message)
+  //         ? t("errors.collabSaveFailed_sizeExceeded")
+  //         : t("errors.collabSaveFailed"),
+  //     });
+  //     console.error(error);
+  //   }
+  // };
 
   stopCollaboration = (keepRemoteState = true) => {
     this.queueBroadcastAllElements.cancel();
     this.queueSaveToFirebase.cancel();
     this.loadImageFiles.cancel();
 
-    this.saveCollabRoomToFirebase(
-      getSyncableElements(
-        this.excalidrawAPI.getSceneElementsIncludingDeleted(),
-      ),
-    );
+    // this.saveCollabRoomToFirebase(
+    //   getSyncableElements(
+    //     this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+    //   ),
+    // );
 
     if (this.portal.socket && this.fallbackInitializationHandler) {
       this.portal.socket.off(
@@ -465,7 +465,7 @@ class Collab extends PureComponent<Props, CollabState> {
         commitToHistory: true,
       });
 
-      this.saveCollabRoomToFirebase(getSyncableElements(elements));
+      // this.saveCollabRoomToFirebase(getSyncableElements(elements));
     }
 
     // fallback in case you're not alone in the room but still don't receive
@@ -802,13 +802,13 @@ class Collab extends PureComponent<Props, CollabState> {
 
   queueSaveToFirebase = throttle(
     () => {
-      if (this.portal.socketInitialized) {
-        this.saveCollabRoomToFirebase(
-          getSyncableElements(
-            this.excalidrawAPI.getSceneElementsIncludingDeleted(),
-          ),
-        );
-      }
+      // if (this.portal.socketInitialized) {
+      //   this.saveCollabRoomToFirebase(
+      //     getSyncableElements(
+      //       this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+      //     ),
+      //   );
+      // }
     },
     SYNC_FULL_SCENE_INTERVAL_MS,
     { leading: false },

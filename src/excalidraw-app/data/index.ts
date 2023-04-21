@@ -152,7 +152,7 @@ export const getRoomIdAndKeyFromLink = (link: string) => {
   const roomId = url.pathname
     .substring(url.pathname.lastIndexOf("/"))
     .replace("/", "");
-  const roomKey = urlSearchParams.get("roomkey");
+  const roomKey = urlSearchParams.get("roomKey");
   const isCollaborating = urlSearchParams.get("collab");
   return { roomId, roomKey, isCollaborating };
 };

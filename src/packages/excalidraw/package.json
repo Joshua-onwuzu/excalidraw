@@ -1,6 +1,6 @@
 {
   "name": "@onwuzu/excalidraw_v2",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "main.js",
   "types": "types/packages/excalidraw/index.d.ts",
   "files": [

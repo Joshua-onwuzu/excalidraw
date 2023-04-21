@@ -233,7 +233,7 @@ export const appLangCodeAtom = atom(
   Array.isArray(detectedLangCode) ? detectedLangCode[0] : detectedLangCode,
 );
 
-const ExcalidrawWrapper = () => {
+const ExcalidrawWrapper = ({ onChange }: { onChange: () => void }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [langCode, setLangCode] = useAtom(appLangCodeAtom);
 
@@ -505,48 +505,48 @@ const ExcalidrawWrapper = () => {
     document.documentElement.classList.toggle("dark", theme === THEME.DARK);
   }, [theme]);
 
-  const onChange = (
-    elements: readonly ExcalidrawElement[],
-    appState: AppState,
-    files: BinaryFiles,
-  ) => {
-    if (collabAPI?.isCollaborating()) {
-      collabAPI.syncElements(elements);
-    }
+  // const onChange = (
+  //   elements: readonly ExcalidrawElement[],
+  //   appState: AppState,
+  //   files: BinaryFiles,
+  // ) => {
+  //   if (collabAPI?.isCollaborating()) {
+  //     collabAPI.syncElements(elements);
+  //   }
 
-    setTheme(appState.theme);
+  //   setTheme(appState.theme);
 
-    // this check is redundant, but since this is a hot path, it's best
-    // not to evaludate the nested expression every time
-    if (!LocalData.isSavePaused()) {
-      LocalData.save(elements, appState, files, () => {
-        if (excalidrawAPI) {
-          let didChange = false;
+  //   // this check is redundant, but since this is a hot path, it's best
+  //   // not to evaludate the nested expression every time
+  //   if (!LocalData.isSavePaused()) {
+  //     LocalData.save(elements, appState, files, () => {
+  //       if (excalidrawAPI) {
+  //         let didChange = false;
 
-          const elements = excalidrawAPI
-            .getSceneElementsIncludingDeleted()
-            .map((element) => {
-              if (
-                LocalData.fileStorage.shouldUpdateImageElementStatus(element)
-              ) {
-                const newElement = newElementWith(element, { status: "saved" });
-                if (newElement !== element) {
-                  didChange = true;
-                }
-                return newElement;
-              }
-              return element;
-            });
+  //         const elements = excalidrawAPI
+  //           .getSceneElementsIncludingDeleted()
+  //           .map((element) => {
+  //             if (
+  //               LocalData.fileStorage.shouldUpdateImageElementStatus(element)
+  //             ) {
+  //               const newElement = newElementWith(element, { status: "saved" });
+  //               if (newElement !== element) {
+  //                 didChange = true;
+  //               }
+  //               return newElement;
+  //             }
+  //             return element;
+  //           });
 
-          if (didChange) {
-            excalidrawAPI.updateScene({
-              elements,
-            });
-          }
-        }
-      });
-    }
-  };
+  //         if (didChange) {
+  //           excalidrawAPI.updateScene({
+  //             elements,
+  //           });
+  //         }
+  //       }
+  //     });
+  //   }
+  // };
 
   const onExportToBackend = async (
     exportedElements: readonly NonDeletedExcalidrawElement[],
@@ -681,11 +681,11 @@ const ExcalidrawWrapper = () => {
   );
 };
 
-const ExcalidrawApp = () => {
+const ExcalidrawApp = ({ onChange }: { onChange: () => void }) => {
   return (
     <TopErrorBoundary>
       <Provider unstable_createStore={() => appJotaiStore}>
-        <ExcalidrawWrapper />
+        <ExcalidrawWrapper onChange={onChange} />
       </Provider>
     </TopErrorBoundary>
   );

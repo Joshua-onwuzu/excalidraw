@@ -76,28 +76,16 @@ const _getFirebase = async (): Promise<
 const loadFirestore = async () => {
   const firebase = await _getFirebase();
   console.log("pop");
-  if (!firestorePromise) {
-    firestorePromise = import(
-      /* webpackChunkName: "firestore" */ "firebase/firestore"
-    );
-  }
   if (firestorePromise !== true) {
     await firestorePromise;
     firestorePromise = true;
   }
+  console.log("done")
   return firebase;
 };
 
 export const loadFirebaseStorage = async () => {
   const firebase = await _getFirebase();
-  if (!firebaseStoragePromise) {
-    console.log("hitting load gth");
-    firebaseStoragePromise = import(
-      /* webpackChunkName: "storage" */ "firebase/storage"
-    );
-    console.log("kolopiuyt");
-  }
-  console.log("");
   if (firebaseStoragePromise !== true) {
     await firebaseStoragePromise;
     firebaseStoragePromise = true;

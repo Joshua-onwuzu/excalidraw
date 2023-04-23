@@ -1,16 +1,23 @@
+import { ISEAPair } from "gun";
 import { compressData, decompressData } from "../../data/encode";
 import {
   decryptData,
   generateEncryptionKey,
   IV_LENGTH_BYTES,
 } from "../../data/encryption";
+import Gun from "gun";
 import { serializeAsJSON } from "../../data/json";
 import { restore } from "../../data/restore";
 import { ImportedDataState } from "../../data/types";
 import { isInvisiblySmallElement } from "../../element/sizeHelpers";
 import { isInitializedImageElement } from "../../element/typeChecks";
-import { ExcalidrawElement, FileId } from "../../element/types";
+import {
+  ExcalidrawElement,
+  FileId,
+  NonDeletedExcalidrawElement,
+} from "../../element/types";
 import { t } from "../../i18n";
+import Sea from "gun/sea";
 import {
   AppState,
   BinaryFileData,
@@ -146,21 +153,42 @@ export const getLinkFormatedUrl = (link: string) => {
   return formatedLink;
 };
 
-export const getRoomIdAndKeyFromLink = (link: string) => {
-  const url = new URL(link);
+export const getRoomInfoFromLink = (link: string) => {
+  const formatedLink = getLinkFormatedUrl(link);
+  const url = new URL(formatedLink);
+
   const urlSearchParams = url.searchParams;
   const roomId = url.pathname
     .substring(url.pathname.lastIndexOf("/"))
     .replace("/", "");
   const roomKey = urlSearchParams.get("roomKey");
   const isCollaborating = urlSearchParams.get("collab");
-  return { roomId, roomKey, isCollaborating };
+  const rtcKey = urlSearchParams.get("key");
+  return { roomId, roomKey, isCollaborating, rtcKey };
+};
+
+export const convertBase64toUint8Array = (str: string): Uint8Array => {
+  return Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+};
+
+export const getISEAKeyPair = (
+  key: string | undefined,
+): ISEAPair | undefined => {
+  if (!key) {
+    return;
+  }
+  const keyInUint8Array = convertBase64toUint8Array(key);
+  return JSON.parse(new TextDecoder().decode(keyInUint8Array));
+};
+
+export const getRtcKeyFromUrl = () => {
+  const { rtcKey: base64RtcKey } = getRoomInfoFromLink(window.location.href);
+  const key = getISEAKeyPair(base64RtcKey as string);
+  return key;
 };
 
 export const getCollaborationLinkData = (link: string) => {
-  const formatedLink = link.replace("/#", "");
-  const { roomId, roomKey, isCollaborating } =
-    getRoomIdAndKeyFromLink(formatedLink);
+  const { roomId, roomKey, isCollaborating } = getRoomInfoFromLink(link);
 
   if (roomId && roomKey && isCollaborating === "true") {
     return { roomId, roomKey };
@@ -170,8 +198,7 @@ export const getCollaborationLinkData = (link: string) => {
 
 export const generateCollaborationLinkData = async () => {
   const link = window.location.href;
-  const formatedLink = getLinkFormatedUrl(link);
-  const { roomId } = getRoomIdAndKeyFromLink(formatedLink);
+  const { roomId } = getRoomInfoFromLink(link);
   const roomKey = await generateEncryptionKey();
 
   if (!roomKey || !roomId) {
@@ -186,6 +213,12 @@ export const getCollaborationLink = (data: {
   roomKey: string;
 }) => {
   return `&roomKey=${data.roomKey}&collab=true`;
+};
+
+export const instantiateGun = () => {
+  return Gun({
+    peers: [process.env.REACT_APP_GUN_URL!],
+  });
 };
 
 /**
@@ -356,4 +389,58 @@ export const exportToBackend = async (
     console.error(error);
     window.alert(t("alerts.couldNotCreateShareableLink"));
   }
+};
+
+export const handleChangesFromWhiteboard = async (
+  draftContentNode: any,
+  content: {
+    elements: readonly ExcalidrawElement[];
+    appState: Record<string, any>;
+  },
+  rtcKey: ISEAPair,
+  previousWhiteboardContent: Record<string, any> | undefined,
+) => {
+  /**
+   * Only save changes from whiteboard when whiteboard is not empty
+   * and when previously saved whiteboard content is not the same as the new content
+   */
+  const isContentEqualsPrevContent =
+    JSON.stringify(content) === JSON.stringify(previousWhiteboardContent);
+  if (content.elements.length > 0 && !isContentEqualsPrevContent) {
+    const data = {
+      content,
+    };
+    const encryptedData = await Sea.encrypt(data, rtcKey as ISEAPair);
+    draftContentNode.put(encryptedData);
+  }
+};
+
+export const handleUpdatesFromBoardNode = (
+  draftContentNode: any,
+  currentSceneElements: readonly NonDeletedExcalidrawElement[],
+  callback: (content: {
+    elements: readonly ExcalidrawElement[];
+    appState: Record<string, any>;
+  }) => void,
+  rtcKey: ISEAPair,
+) => {
+  /**
+   * This listens for changes made on the content node
+   * callback function is being called only when incoming_state was not written by the current user && user current state is not the same as the incoming_data
+   */
+  draftContentNode.on(async (data: string) => {
+    const decryptedData = await Sea.decrypt(data, rtcKey as ISEAPair);
+
+    if (
+      JSON.stringify(currentSceneElements) !==
+      JSON.stringify(decryptedData.content.elements)
+    ) {
+      const { elements, appState } = decryptedData.content;
+      callback({
+        elements,
+        appState: { ...appState, collaborators: [] },
+      });
+      draftContentNode.off();
+    }
+  });
 };

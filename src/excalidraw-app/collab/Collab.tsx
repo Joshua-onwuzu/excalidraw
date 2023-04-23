@@ -416,12 +416,9 @@ class Collab extends PureComponent<Props, CollabState> {
     }
 
     const scenePromise = resolvablePromise<ImportedDataState | null>();
-    console.log(scenePromise, "hitting here");
 
     this.setIsCollaborating(true);
     LocalData.pauseSave("collaboration");
-    console.log("about to import socket client");
-    console.log("after socket io");
     const fallbackInitializationHandler = () => {
       this.initializeRoom({
         roomLinkData: existingRoomLinkData,

@@ -57,6 +57,11 @@ import Collab, {
 import {
   exportToBackend,
   getCollaborationLinkData,
+  getRoomInfoFromLink,
+  getRtcKeyFromUrl,
+  handleChangesFromWhiteboard,
+  handleUpdatesFromBoardNode,
+  instantiateGun,
   isCollaborationLink,
   loadScene,
 } from "./data";
@@ -86,6 +91,7 @@ import { appJotaiStore } from "./app-jotai";
 
 import "./index.scss";
 import { ResolutionType } from "../utility-types";
+import { ISEAPair } from "gun";
 
 polyfill();
 
@@ -96,137 +102,137 @@ languageDetector.init({
   languageUtils: {},
 });
 
-const initializeScene = async (opts: {
-  collabAPI: CollabAPI;
-  excalidrawAPI: ExcalidrawImperativeAPI;
-}): Promise<
-  { scene: ExcalidrawInitialDataState | null } & (
-    | { isExternalScene: true; id: string; key: string }
-    | { isExternalScene: false; id?: null; key?: null }
-  )
-> => {
-  const searchParams = new URLSearchParams(window.location.search);
-  const id = searchParams.get("id");
-  const jsonBackendMatch = window.location.hash.match(
-    /^#json=([a-zA-Z0-9_-]+),([a-zA-Z0-9_-]+)$/,
-  );
-  const externalUrlMatch = window.location.hash.match(/^#url=(.*)$/);
+// const initializeScene = async (opts: {
+//   collabAPI: CollabAPI;
+//   excalidrawAPI: ExcalidrawImperativeAPI;
+// }): Promise<
+//   { scene: ExcalidrawInitialDataState | null } & (
+//     | { isExternalScene: true; id: string; key: string }
+//     | { isExternalScene: false; id?: null; key?: null }
+//   )
+// > => {
+//   const searchParams = new URLSearchParams(window.location.search);
+//   const id = searchParams.get("id");
+//   const jsonBackendMatch = window.location.hash.match(
+//     /^#json=([a-zA-Z0-9_-]+),([a-zA-Z0-9_-]+)$/,
+//   );
+//   const externalUrlMatch = window.location.hash.match(/^#url=(.*)$/);
 
-  const localDataState = importFromLocalStorage();
+//   const localDataState = importFromLocalStorage();
 
-  let scene: RestoredDataState & {
-    scrollToContent?: boolean;
-  } = await loadScene(null, null, localDataState);
+//   let scene: RestoredDataState & {
+//     scrollToContent?: boolean;
+//   } = await loadScene(null, null, localDataState);
 
-  let roomLinkData = getCollaborationLinkData(window.location.href);
-  const isExternalScene = !!(id || jsonBackendMatch || roomLinkData);
-  if (isExternalScene) {
-    if (
-      // don't prompt if scene is empty
-      !scene.elements.length ||
-      // don't prompt for collab scenes because we don't override local storage
-      roomLinkData ||
-      // otherwise, prompt whether user wants to override current scene
-      window.confirm(t("alerts.loadSceneOverridePrompt"))
-    ) {
-      if (jsonBackendMatch) {
-        scene = await loadScene(
-          jsonBackendMatch[1],
-          jsonBackendMatch[2],
-          localDataState,
-        );
-      }
-      scene.scrollToContent = true;
-      if (!roomLinkData) {
-        window.history.replaceState({}, APP_NAME, window.location.origin);
-      }
-    } else {
-      // https://github.com/excalidraw/excalidraw/issues/1919
-      if (document.hidden) {
-        return new Promise((resolve, reject) => {
-          window.addEventListener(
-            "focus",
-            () => initializeScene(opts).then(resolve).catch(reject),
-            {
-              once: true,
-            },
-          );
-        });
-      }
+//   let roomLinkData = getCollaborationLinkData(window.location.href);
+//   const isExternalScene = !!(id || jsonBackendMatch || roomLinkData);
+//   if (isExternalScene) {
+//     if (
+//       // don't prompt if scene is empty
+//       !scene.elements.length ||
+//       // don't prompt for collab scenes because we don't override local storage
+//       roomLinkData ||
+//       // otherwise, prompt whether user wants to override current scene
+//       window.confirm(t("alerts.loadSceneOverridePrompt"))
+//     ) {
+//       if (jsonBackendMatch) {
+//         scene = await loadScene(
+//           jsonBackendMatch[1],
+//           jsonBackendMatch[2],
+//           localDataState,
+//         );
+//       }
+//       scene.scrollToContent = true;
+//       if (!roomLinkData) {
+//         window.history.replaceState({}, APP_NAME, window.location.origin);
+//       }
+//     } else {
+//       // https://github.com/excalidraw/excalidraw/issues/1919
+//       if (document.hidden) {
+//         return new Promise((resolve, reject) => {
+//           window.addEventListener(
+//             "focus",
+//             () => initializeScene(opts).then(resolve).catch(reject),
+//             {
+//               once: true,
+//             },
+//           );
+//         });
+//       }
 
-      roomLinkData = null;
-      window.history.replaceState({}, APP_NAME, window.location.origin);
-    }
-  } else if (externalUrlMatch) {
-    window.history.replaceState({}, APP_NAME, window.location.origin);
+//       roomLinkData = null;
+//       window.history.replaceState({}, APP_NAME, window.location.origin);
+//     }
+//   } else if (externalUrlMatch) {
+//     window.history.replaceState({}, APP_NAME, window.location.origin);
 
-    const url = externalUrlMatch[1];
-    try {
-      const request = await fetch(window.decodeURIComponent(url));
-      const data = await loadFromBlob(await request.blob(), null, null);
-      if (
-        !scene.elements.length ||
-        window.confirm(t("alerts.loadSceneOverridePrompt"))
-      ) {
-        return { scene: data, isExternalScene };
-      }
-    } catch (error: any) {
-      return {
-        scene: {
-          appState: {
-            errorMessage: t("alerts.invalidSceneUrl"),
-          },
-        },
-        isExternalScene,
-      };
-    }
-  }
+//     const url = externalUrlMatch[1];
+//     try {
+//       const request = await fetch(window.decodeURIComponent(url));
+//       const data = await loadFromBlob(await request.blob(), null, null);
+//       if (
+//         !scene.elements.length ||
+//         window.confirm(t("alerts.loadSceneOverridePrompt"))
+//       ) {
+//         return { scene: data, isExternalScene };
+//       }
+//     } catch (error: any) {
+//       return {
+//         scene: {
+//           appState: {
+//             errorMessage: t("alerts.invalidSceneUrl"),
+//           },
+//         },
+//         isExternalScene,
+//       };
+//     }
+//   }
 
-  if (roomLinkData) {
-    const { excalidrawAPI } = opts;
+//   if (roomLinkData) {
+//     const { excalidrawAPI } = opts;
 
-    const scene = await opts.collabAPI.startCollaboration(roomLinkData);
+//     const scene = await opts.collabAPI.startCollaboration(roomLinkData);
 
-    return {
-      // when collaborating, the state may have already been updated at this
-      // point (we may have received updates from other clients), so reconcile
-      // elements and appState with existing state
-      scene: {
-        ...scene,
-        appState: {
-          ...restoreAppState(
-            {
-              ...scene?.appState,
-              theme: localDataState?.appState?.theme || scene?.appState?.theme,
-            },
-            excalidrawAPI.getAppState(),
-          ),
-          // necessary if we're invoking from a hashchange handler which doesn't
-          // go through App.initializeScene() that resets this flag
-          isLoading: false,
-        },
-        elements: reconcileElements(
-          scene?.elements || [],
-          excalidrawAPI.getSceneElementsIncludingDeleted(),
-          excalidrawAPI.getAppState(),
-        ),
-      },
-      isExternalScene: true,
-      id: roomLinkData.roomId,
-      key: roomLinkData.roomKey,
-    };
-  } else if (scene) {
-    return isExternalScene && jsonBackendMatch
-      ? {
-          scene,
-          isExternalScene,
-          id: jsonBackendMatch[1],
-          key: jsonBackendMatch[2],
-        }
-      : { scene, isExternalScene: false };
-  }
-  return { scene: null, isExternalScene: false };
-};
+//     return {
+//       // when collaborating, the state may have already been updated at this
+//       // point (we may have received updates from other clients), so reconcile
+//       // elements and appState with existing state
+//       scene: {
+//         ...scene,
+//         appState: {
+//           ...restoreAppState(
+//             {
+//               ...scene?.appState,
+//               theme: localDataState?.appState?.theme || scene?.appState?.theme,
+//             },
+//             excalidrawAPI.getAppState(),
+//           ),
+//           // necessary if we're invoking from a hashchange handler which doesn't
+//           // go through App.initializeScene() that resets this flag
+//           isLoading: false,
+//         },
+//         elements: reconcileElements(
+//           scene?.elements || [],
+//           excalidrawAPI.getSceneElementsIncludingDeleted(),
+//           excalidrawAPI.getAppState(),
+//         ),
+//       },
+//       isExternalScene: true,
+//       id: roomLinkData.roomId,
+//       key: roomLinkData.roomKey,
+//     };
+//   } else if (scene) {
+//     return isExternalScene && jsonBackendMatch
+//       ? {
+//           scene,
+//           isExternalScene,
+//           id: jsonBackendMatch[1],
+//           key: jsonBackendMatch[2],
+//         }
+//       : { scene, isExternalScene: false };
+//   }
+//   return { scene: null, isExternalScene: false };
+// };
 
 const detectedLangCode = languageDetector.detect() || defaultLang.code;
 export const appLangCodeAtom = atom(
@@ -236,17 +242,27 @@ export const appLangCodeAtom = atom(
 const ExcalidrawWrapper = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [langCode, setLangCode] = useAtom(appLangCodeAtom);
+  const [previousWhiteboardContent, setPrevWhiteboardContent] =
+    useState<Record<string, any>>();
+
+  const [initialData, setInitialData] = useState();
+  const rtcKey = getRtcKeyFromUrl();
+  const { roomId } = getRoomInfoFromLink(window.location.href);
+  const whiteboardNode = instantiateGun()
+    .user()
+    .auth(rtcKey as ISEAPair)
+    .get(`content/${roomId}`);
 
   // initial state
   // ---------------------------------------------------------------------------
 
-  const initialStatePromiseRef = useRef<{
-    promise: ResolvablePromise<ExcalidrawInitialDataState | null>;
-  }>({ promise: null! });
-  if (!initialStatePromiseRef.current.promise) {
-    initialStatePromiseRef.current.promise =
-      resolvablePromise<ExcalidrawInitialDataState | null>();
-  }
+  // const initialStatePromiseRef = useRef<{
+  //   promise: ResolvablePromise<ExcalidrawInitialDataState | null>;
+  // }>({ promise: null! });
+  // if (!initialStatePromiseRef.current.promise) {
+  //   initialStatePromiseRef.current.promise =
+  //     resolvablePromise<ExcalidrawInitialDataState | null>();
+  // }
 
   useEffect(() => {
     trackEvent("load", "frame", getFrame());
@@ -275,77 +291,77 @@ const ExcalidrawWrapper = () => {
       return;
     }
 
-    const loadImages = (
-      data: ResolutionType<typeof initializeScene>,
-      isInitialLoad = false,
-    ) => {
-      if (!data.scene) {
-        return;
-      }
-      if (collabAPI.isCollaborating()) {
-        if (data.scene.elements) {
-          collabAPI
-            .fetchImageFilesFromFirebase({
-              elements: data.scene.elements,
-              forceFetchFiles: true,
-            })
-            .then(({ loadedFiles, erroredFiles }) => {
-              excalidrawAPI.addFiles(loadedFiles);
-              updateStaleImageStatuses({
-                excalidrawAPI,
-                erroredFiles,
-                elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
-              });
-            });
-        }
-      } else {
-        const fileIds =
-          data.scene.elements?.reduce((acc, element) => {
-            if (isInitializedImageElement(element)) {
-              return acc.concat(element.fileId);
-            }
-            return acc;
-          }, [] as FileId[]) || [];
+    // const loadImages = (
+    //   data: ResolutionType<typeof initializeScene>,
+    //   isInitialLoad = false,
+    // ) => {
+    //   if (!data.scene) {
+    //     return;
+    //   }
+    //   if (collabAPI.isCollaborating()) {
+    //     if (data.scene.elements) {
+    //       collabAPI
+    //         .fetchImageFilesFromFirebase({
+    //           elements: data.scene.elements,
+    //           forceFetchFiles: true,
+    //         })
+    //         .then(({ loadedFiles, erroredFiles }) => {
+    //           excalidrawAPI.addFiles(loadedFiles);
+    //           updateStaleImageStatuses({
+    //             excalidrawAPI,
+    //             erroredFiles,
+    //             elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+    //           });
+    //         });
+    //     }
+    //   } else {
+    //     const fileIds =
+    //       data.scene.elements?.reduce((acc, element) => {
+    //         if (isInitializedImageElement(element)) {
+    //           return acc.concat(element.fileId);
+    //         }
+    //         return acc;
+    //       }, [] as FileId[]) || [];
 
-        if (data.isExternalScene) {
-          loadFilesFromFirebase(
-            `${FIREBASE_STORAGE_PREFIXES.shareLinkFiles}/${data.id}`,
-            data.key,
-            fileIds,
-          ).then(({ loadedFiles, erroredFiles }) => {
-            excalidrawAPI.addFiles(loadedFiles);
-            updateStaleImageStatuses({
-              excalidrawAPI,
-              erroredFiles,
-              elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
-            });
-          });
-        } else if (isInitialLoad) {
-          if (fileIds.length) {
-            LocalData.fileStorage
-              .getFiles(fileIds)
-              .then(({ loadedFiles, erroredFiles }) => {
-                if (loadedFiles.length) {
-                  excalidrawAPI.addFiles(loadedFiles);
-                }
-                updateStaleImageStatuses({
-                  excalidrawAPI,
-                  erroredFiles,
-                  elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
-                });
-              });
-          }
-          // on fresh load, clear unused files from IDB (from previous
-          // session)
-          LocalData.fileStorage.clearObsoleteFiles({ currentFileIds: fileIds });
-        }
-      }
-    };
+    //     if (data.isExternalScene) {
+    //       loadFilesFromFirebase(
+    //         `${FIREBASE_STORAGE_PREFIXES.shareLinkFiles}/${data.id}`,
+    //         data.key,
+    //         fileIds,
+    //       ).then(({ loadedFiles, erroredFiles }) => {
+    //         excalidrawAPI.addFiles(loadedFiles);
+    //         updateStaleImageStatuses({
+    //           excalidrawAPI,
+    //           erroredFiles,
+    //           elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+    //         });
+    //       });
+    //     } else if (isInitialLoad) {
+    //       if (fileIds.length) {
+    //         LocalData.fileStorage
+    //           .getFiles(fileIds)
+    //           .then(({ loadedFiles, erroredFiles }) => {
+    //             if (loadedFiles.length) {
+    //               excalidrawAPI.addFiles(loadedFiles);
+    //             }
+    //             updateStaleImageStatuses({
+    //               excalidrawAPI,
+    //               erroredFiles,
+    //               elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+    //             });
+    //           });
+    //       }
+    //       // on fresh load, clear unused files from IDB (from previous
+    //       // session)
+    //       LocalData.fileStorage.clearObsoleteFiles({ currentFileIds: fileIds });
+    //     }
+    //   }
+    // };
 
-    initializeScene({ collabAPI, excalidrawAPI }).then(async (data) => {
-      loadImages(data, /* isInitialLoad */ true);
-      initialStatePromiseRef.current.promise.resolve(data.scene);
-    });
+    // initializeScene({ collabAPI, excalidrawAPI }).then(async (data) => {
+    //   loadImages(data, /* isInitialLoad */ true);
+    //   initialStatePromiseRef.current.promise.resolve(data.scene);
+    // });
 
     const onHashChange = async (event: HashChangeEvent) => {
       event.preventDefault();
@@ -359,16 +375,16 @@ const ExcalidrawWrapper = () => {
         }
         excalidrawAPI.updateScene({ appState: { isLoading: true } });
 
-        initializeScene({ collabAPI, excalidrawAPI }).then((data) => {
-          loadImages(data);
-          if (data.scene) {
-            excalidrawAPI.updateScene({
-              ...data.scene,
-              ...restore(data.scene, null, null, { repairBindings: true }),
-              commitToHistory: true,
-            });
-          }
-        });
+        // initializeScene({ collabAPI, excalidrawAPI }).then((data) => {
+        //   loadImages(data);
+        //   if (data.scene) {
+        //     excalidrawAPI.updateScene({
+        //       ...data.scene,
+        //       ...restore(data.scene, null, null, { repairBindings: true }),
+        //       commitToHistory: true,
+        //     });
+        //   }
+        // });
       }
     };
 
@@ -480,6 +496,31 @@ const ExcalidrawWrapper = () => {
         preventUnload(event);
       }
     };
+    const currentSceneElements = excalidrawAPI?.getSceneElements();
+    const callback = ({
+      elements,
+      appState,
+    }: {
+      elements: readonly ExcalidrawElement[];
+      appState: any;
+    }) => {
+      excalidrawAPI?.updateScene({
+        elements,
+        appState,
+      });
+      setPrevWhiteboardContent({
+        elements,
+        appState,
+      });
+    };
+    excalidrawAPI &&
+      handleUpdatesFromBoardNode(
+        whiteboardNode,
+        currentSceneElements as NonDeletedExcalidrawElement[],
+        callback,
+        rtcKey as ISEAPair,
+      );
+
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {
       window.removeEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
@@ -505,7 +546,7 @@ const ExcalidrawWrapper = () => {
     document.documentElement.classList.toggle("dark", theme === THEME.DARK);
   }, [theme]);
 
-  const onChange = (
+  const onChange = async (
     elements: readonly ExcalidrawElement[],
     appState: AppState,
     files: BinaryFiles,
@@ -515,6 +556,14 @@ const ExcalidrawWrapper = () => {
     }
 
     setTheme(appState.theme);
+
+    await handleChangesFromWhiteboard(
+      whiteboardNode,
+      { elements, appState },
+      rtcKey as ISEAPair,
+      previousWhiteboardContent,
+    );
+    setPrevWhiteboardContent({ elements, appState });
 
     // this check is redundant, but since this is a hot path, it's best
     // not to evaludate the nested expression every time
@@ -613,7 +662,6 @@ const ExcalidrawWrapper = () => {
       <Excalidraw
         ref={excalidrawRefCallback}
         onChange={onChange}
-        initialData={initialStatePromiseRef.current.promise}
         isCollaborating={isCollaborating}
         onPointerUpdate={collabAPI?.onPointerUpdate}
         UIOptions={{

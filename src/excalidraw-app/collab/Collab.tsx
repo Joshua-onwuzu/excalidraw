@@ -33,6 +33,7 @@ import {
   generateCollaborationLinkData,
   getCollaborationLink,
   getCollabServer,
+  getLinkFormatedUrl,
   getSyncableElements,
   SocketUpdateDataSource,
   SyncableExcalidrawElement,
@@ -294,7 +295,17 @@ class Collab extends PureComponent<Props, CollabState> {
       // that could have been saved in other tabs while we were collaborating
       resetBrowserStateVersions();
 
-      window.history.pushState({}, APP_NAME, window.location.origin);
+      const link = window.location.href;
+      const formatedLink = getLinkFormatedUrl(link);
+      const url = new URL(formatedLink);
+      const urlSearchParams = url.searchParams;
+      urlSearchParams.delete("collab");
+      urlSearchParams.delete("roomKey");
+      window.history.pushState(
+        {},
+        APP_NAME,
+        `${url.origin}/#${url.pathname}${url.search}`,
+      );
       this.destroySocketClient();
 
       LocalData.fileStorage.reset();

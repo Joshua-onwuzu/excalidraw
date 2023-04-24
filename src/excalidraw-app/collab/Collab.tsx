@@ -590,28 +590,28 @@ class Collab extends PureComponent<Props, CollabState> {
     if (fetchScene && roomLinkData && this.portal.socket) {
       this.excalidrawAPI.resetScene();
 
-      try {
-        const elements = await loadFromFirebase(
-          roomLinkData.roomId,
-          roomLinkData.roomKey,
-          this.portal.socket,
-        );
-        if (elements) {
-          this.setLastBroadcastedOrReceivedSceneVersion(
-            getSceneVersion(elements),
-          );
+      // try {
+      //   const elements = await loadFromFirebase(
+      //     roomLinkData.roomId,
+      //     roomLinkData.roomKey,
+      //     this.portal.socket,
+      //   );
+      //   if (elements) {
+      //     this.setLastBroadcastedOrReceivedSceneVersion(
+      //       getSceneVersion(elements),
+      //     );
 
-          return {
-            elements,
-            scrollToContent: true,
-          };
-        }
-      } catch (error: any) {
-        // log the error and move on. other peers will sync us the scene.
-        console.error(error);
-      } finally {
+      //     return {
+      //       elements,
+      //       scrollToContent: true,
+      //     };
+      //   }
+      // } catch (error: any) {
+      //   // log the error and move on. other peers will sync us the scene.
+      //   console.error(error);
+      // } finally {
         this.portal.socketInitialized = true;
-      }
+      // }
     } else {
       this.portal.socketInitialized = true;
     }

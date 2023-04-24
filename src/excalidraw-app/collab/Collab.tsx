@@ -590,7 +590,7 @@ class Collab extends PureComponent<Props, CollabState> {
       );
     }
     if (fetchScene && roomLinkData && this.portal.socket) {
-      this.excalidrawAPI.resetScene();
+      // this.excalidrawAPI.resetScene();
 
       // try {
       //   const elements = await loadFromFirebase(

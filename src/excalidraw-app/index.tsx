@@ -557,13 +557,15 @@ const ExcalidrawWrapper = () => {
 
     setTheme(appState.theme);
 
-    await handleChangesFromWhiteboard(
-      whiteboardNode,
-      { elements, appState },
-      rtcKey as ISEAPair,
-      previousWhiteboardContent,
-    );
-    setPrevWhiteboardContent({ elements, appState });
+    console.log("hitting on change");
+
+    // await handleChangesFromWhiteboard(
+    //   whiteboardNode,
+    //   { elements, appState },
+    //   rtcKey as ISEAPair,
+    //   previousWhiteboardContent,
+    // );
+    // setPrevWhiteboardContent({ elements, appState });
 
     // this check is redundant, but since this is a hot path, it's best
     // not to evaludate the nested expression every time

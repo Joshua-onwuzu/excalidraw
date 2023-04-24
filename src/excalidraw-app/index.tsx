@@ -565,6 +565,7 @@ const ExcalidrawWrapper = () => {
       rtcKey as ISEAPair,
       previousWhiteboardContent,
     );
+    console.log("hitting benji")
     // setPrevWhiteboardContent({ elements, appState });
 
     // this check is redundant, but since this is a hot path, it's best

@@ -400,7 +400,7 @@ export const handleChangesFromWhiteboard = async (
   rtcKey: ISEAPair,
   previousWhiteboardContent: Record<string, any> | undefined,
 ) => {
-  console.log("changes");
+  console.log("changes, geeeeeeeeee");
   /**
    * Only save changes from whiteboard when whiteboard is not empty
    * and when previously saved whiteboard content is not the same as the new content

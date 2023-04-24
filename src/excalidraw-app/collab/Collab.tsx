@@ -445,32 +445,32 @@ class Collab extends PureComponent<Props, CollabState> {
         roomKey,
       );
 
-      // this.portal.socket.once("connect_error", fallbackInitializationHandler);
+      this.portal.socket.once("connect_error", fallbackInitializationHandler);
     } catch (error: any) {
       console.error(error);
       this.setState({ errorMessage: error.message });
       return null;
     }
 
-    if (!existingRoomLinkData) {
-      const elements = this.excalidrawAPI.getSceneElements().map((element) => {
-        if (isImageElement(element) && element.status === "saved") {
-          return newElementWith(element, { status: "pending" });
-        }
-        return element;
-      });
-      // remove deleted elements from elements array & history to ensure we don't
-      // expose potentially sensitive user data in case user manually deletes
-      // existing elements (or clears scene), which would otherwise be persisted
-      // to database even if deleted before creating the room.
-      this.excalidrawAPI.history.clear();
-      this.excalidrawAPI.updateScene({
-        elements,
-        commitToHistory: true,
-      });
+    // if (!existingRoomLinkData) {
+    //   const elements = this.excalidrawAPI.getSceneElements().map((element) => {
+    //     if (isImageElement(element) && element.status === "saved") {
+    //       return newElementWith(element, { status: "pending" });
+    //     }
+    //     return element;
+    //   });
+    //   // remove deleted elements from elements array & history to ensure we don't
+    //   // expose potentially sensitive user data in case user manually deletes
+    //   // existing elements (or clears scene), which would otherwise be persisted
+    //   // to database even if deleted before creating the room.
+    //   this.excalidrawAPI.history.clear();
+    //   this.excalidrawAPI.updateScene({
+    //     elements,
+    //     commitToHistory: true,
+    //   });
 
-      // this.saveCollabRoomToFirebase(getSyncableElements(elements));
-    }
+    //   // this.saveCollabRoomToFirebase(getSyncableElements(elements));
+    // }
 
     // fallback in case you're not alone in the room but still don't receive
     // initial SCENE_INIT message

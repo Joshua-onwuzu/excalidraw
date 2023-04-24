@@ -398,6 +398,7 @@ export const handleChangesFromWhiteboard = async (
     appState: Record<string, any>;
   },
   rtcKey: ISEAPair,
+  sessionId: string,
 ) => {
   console.log("changes, geeeeeeeeee");
   /**
@@ -410,6 +411,7 @@ export const handleChangesFromWhiteboard = async (
     console.log("changes done........");
     const data = {
       content,
+      sessionId,
     };
     const encryptedData = await Sea.encrypt(data, rtcKey as ISEAPair);
     draftContentNode.put(encryptedData);
@@ -424,7 +426,7 @@ export const handleUpdatesFromBoardNode = (
     appState: Record<string, any>;
   }) => void,
   rtcKey: ISEAPair,
-  sessionId: string
+  sessionId: string,
 ) => {
   /**
    * This listens for changes made on the content node
@@ -435,9 +437,10 @@ export const handleUpdatesFromBoardNode = (
 
     console.log("hitting up");
 
-    if (decryptedData.by !== sessionId &&
+    if (
+      decryptedData.by !== sessionId &&
       JSON.stringify(currentSceneElements) !==
-      JSON.stringify(decryptedData.content.elements)
+        JSON.stringify(decryptedData.content.elements)
     ) {
       console.log("hitting merch");
       const { elements, appState } = decryptedData.content;

@@ -566,6 +566,7 @@ const ExcalidrawWrapper = () => {
       whiteboardNode,
       { elements, appState },
       rtcKey as ISEAPair,
+      sessionId,
     );
     console.log("hitting benji");
     // setPrevWhiteboardContent({ elements, appState });

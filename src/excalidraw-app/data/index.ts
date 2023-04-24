@@ -398,16 +398,15 @@ export const handleChangesFromWhiteboard = async (
     appState: Record<string, any>;
   },
   rtcKey: ISEAPair,
-  previousWhiteboardContent: Record<string, any> | undefined,
 ) => {
   console.log("changes, geeeeeeeeee");
   /**
    * Only save changes from whiteboard when whiteboard is not empty
    * and when previously saved whiteboard content is not the same as the new content
    */
-  const isContentEqualsPrevContent =
-    JSON.stringify(content) === JSON.stringify(previousWhiteboardContent);
-  if (content.elements.length > 0 && !isContentEqualsPrevContent) {
+  // const isContentEqualsPrevContent =
+  //   JSON.stringify(content) === JSON.stringify(previousWhiteboardContent);
+  if (content.elements.length > 0) {
     console.log("changes done........");
     const data = {
       content,

@@ -425,6 +425,7 @@ class Collab extends PureComponent<Props, CollabState> {
         roomLinkData: existingRoomLinkData,
         fetchScene: true,
       }).then((scene) => {
+        console.log("hitting after bastard ibile");
         scenePromise.resolve(scene);
       });
     };

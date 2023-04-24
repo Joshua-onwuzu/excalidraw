@@ -12,7 +12,7 @@ export const UserList: React.FC<{
   collaborators: AppState["collaborators"];
 }> = ({ className, mobile, collaborators }) => {
   const actionManager = useExcalidrawActionManager();
-
+  console.log(collaborators, "collaborator");
   const uniqueCollaborators = new Map<string, Collaborator>();
   collaborators.forEach((collaborator, socketId) => {
     uniqueCollaborators.set(
@@ -27,6 +27,7 @@ export const UserList: React.FC<{
     Array.from(uniqueCollaborators)
       .filter(([_, client]) => Object.keys(client).length !== 0)
       .map(([clientId, collaborator]) => {
+        console.log(clientId, collaborator, "mustapha n");
         const avatarJSX = actionManager.renderAction("goToCollaborator", [
           clientId,
           collaborator,

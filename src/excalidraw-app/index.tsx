@@ -105,11 +105,13 @@ languageDetector.init({
   languageUtils: {},
 });
 
-
 const initializeScene = async (opts: {
   collabAPI: CollabAPI;
   excalidrawAPI: ExcalidrawImperativeAPI;
 }) => {
+  if (!opts.collabAPI || !opts.excalidrawAPI) {
+    return;
+  }
   // const searchParams = new URLSearchParams(window.location.search);
   // const id = searchParams.get("id");
   // const jsonBackendMatch = window.location.hash.match(
@@ -123,7 +125,7 @@ const initializeScene = async (opts: {
   //   scrollToContent?: boolean;
   // } = await loadScene(null, null, localDataState);
 
-  let roomLinkData = getCollaborationLinkData(window.location.href);
+  const roomLinkData = getCollaborationLinkData(window.location.href);
   // const isExternalScene = !!(id || jsonBackendMatch || roomLinkData);
   // if (isExternalScene) {
   //   if (
@@ -186,7 +188,7 @@ const initializeScene = async (opts: {
   //     };
   //   }
   // }
-
+  console.log(roomLinkData, "data");
   if (roomLinkData) {
     const { excalidrawAPI } = opts;
 
@@ -220,7 +222,7 @@ const initializeScene = async (opts: {
       id: roomLinkData.roomId,
       key: roomLinkData.roomKey,
     };
-  } 
+  }
   // else if (scene) {
   //   return isExternalScene && jsonBackendMatch
   //     ? {
@@ -519,9 +521,11 @@ const ExcalidrawWrapper = () => {
         rtcKey as ISEAPair,
         sessionId,
       );
-    let roomLinkData = getCollaborationLinkData(window.location.href);
 
-
+    initializeScene({
+      collabAPI: collabAPI as CollabAPI,
+      excalidrawAPI: excalidrawAPI as ExcalidrawImperativeAPI,
+    });
 
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {
@@ -553,7 +557,7 @@ const ExcalidrawWrapper = () => {
     appState: AppState,
     files: BinaryFiles,
   ) => {
-    console.log({elements, appState}, "Nevers say")
+    console.log({ elements, appState }, "Nevers say");
     if (collabAPI?.isCollaborating()) {
       collabAPI.syncElements(elements);
     }

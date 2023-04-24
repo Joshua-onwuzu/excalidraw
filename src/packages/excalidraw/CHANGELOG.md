@@ -675,6 +675,11 @@ Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/
 **_This section lists the updates made to the excalidraw library and will not affect the integration._**
 
 ---
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.9.0 (2021-07-10)
 
 Check out the [release notes](https://github.com/excalidraw/excalidraw/releases/tag/v0.9.0)

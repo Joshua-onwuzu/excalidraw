@@ -21,17 +21,14 @@ export const UserList: React.FC<{
       collaborator,
     );
   });
-  const ox =
-    uniqueCollaborators.size > 0 &&
-    Array.from(uniqueCollaborators).filter(([_, client]) => {
-      return Object.keys(client).length !== 0 && _;
-    });
-  const bx =
-    uniqueCollaborators.size > 0 &&
-    Array.from(uniqueCollaborators).filter(([_, client]) => {
-      return Object.keys(client).length !== 0 && typeof _ !== "undefined";
-    });
-
+  console.log(uniqueCollaborators, "brass");
+  const ox = Array.from(uniqueCollaborators).filter(([_, client]) => {
+    return Object.keys(client).length !== 0;
+  });
+  const bx = Array.from(uniqueCollaborators).filter(([_, client]) => {
+    return Object.keys(client).length !== 0 && typeof _ !== "undefined";
+  });
+console.log("geeeeeez")
   console.log(ox, "free of charge");
   console.log(bx, "mine for rever");
   const avatars =

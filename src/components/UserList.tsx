@@ -21,7 +21,13 @@ export const UserList: React.FC<{
       collaborator,
     );
   });
+  const ox =
+    uniqueCollaborators.size > 0 &&
+    Array.from(uniqueCollaborators).filter(([_, client]) => {
+      return Object.keys(client).length !== 0 && _;
+    });
 
+  console.log(ox, "free of charge");
   const avatars =
     uniqueCollaborators.size > 0 &&
     Array.from(uniqueCollaborators)

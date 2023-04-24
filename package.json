@@ -49,6 +49,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-scripts": "5.0.1",
+    "react-uuid": "2.0.0",
     "roughjs": "4.5.2",
     "sass": "1.51.0",
     "socket.io-client": "2.3.1",

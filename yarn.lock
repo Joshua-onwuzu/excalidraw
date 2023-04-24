@@ -115,25 +115,7 @@
     eslint-visitor-keys "^2.1.0"
     semver "^6.3.0"
 
-"@babel/generator@^7.19.6":
-  version "7.20.0"
-  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.20.0.tgz"
-  integrity sha512-GUPcXxWibClgmYJuIwC2Bc2Lg+8b9VjaJ+HlNdACEVt+Wlr1eoU1OPZjZRm7Hzl0gaTsUZNQfeihvZJhG7oc3w==
-  dependencies:
-    "@babel/types" "^7.20.0"
-    "@jridgewell/gen-mapping" "^0.3.2"
-    jsesc "^2.5.1"
-
-"@babel/generator@^7.20.0":
-  version "7.20.0"
-  resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.20.0.tgz"
-  integrity sha512-GUPcXxWibClgmYJuIwC2Bc2Lg+8b9VjaJ+HlNdACEVt+Wlr1eoU1OPZjZRm7Hzl0gaTsUZNQfeihvZJhG7oc3w==
-  dependencies:
-    "@babel/types" "^7.20.0"
-    "@jridgewell/gen-mapping" "^0.3.2"
-    jsesc "^2.5.1"
-
-"@babel/generator@^7.20.1", "@babel/generator@^7.20.2", "@babel/generator@^7.7.2":
+"@babel/generator@^7.19.6", "@babel/generator@^7.20.0", "@babel/generator@^7.20.1", "@babel/generator@^7.20.2", "@babel/generator@^7.7.2":
   version "7.20.4"
   resolved "https://registry.npmjs.org/@babel/generator/-/generator-7.20.4.tgz"
   integrity sha512-luCf7yk/cm7yab6CAW1aiFnmEfBJplb/JojV56MYEK7ziWfGmFlTfmL9Ehwfy4gFhbjBfWO1wj7/TuSbVNEEtA==
@@ -2515,18 +2497,7 @@
   resolved "https://registry.npmjs.org/@types/aria-query/-/aria-query-4.2.2.tgz"
   integrity sha512-HnYpAE1Y6kRyKM/XkEuiRQhTHvkzMBurTHnpFLYLBGPIylZNPs9jJcuOOYWxPLJCSEtmZT0Y8rHDokKN7rRTig==
 
-"@types/babel__core@^7.0.0":
-  version "7.1.19"
-  resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.1.19.tgz"
-  integrity sha512-WEOTgRsbYkvA/KCsDwVEGkd7WAr1e3g31VHQ8zy5gul/V1qKullU/BU5I68X5v7V3GnB9eotmom4v5a5gjxorw==
-  dependencies:
-    "@babel/parser" "^7.1.0"
-    "@babel/types" "^7.0.0"
-    "@types/babel__generator" "*"
-    "@types/babel__template" "*"
-    "@types/babel__traverse" "*"
-
-"@types/babel__core@^7.1.14", "@types/babel__core@^7.1.9":
+"@types/babel__core@^7.0.0", "@types/babel__core@^7.1.14", "@types/babel__core@^7.1.9":
   version "7.1.20"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.1.20.tgz"
   integrity sha512-PVb6Bg2QuscZ30FvOU7z4guG6c926D9YRvOxEaelzndpMsvP+YM74Q/dAFASpg2l6+XLalxSGxcq/lrgYWZtyQ==
@@ -3160,12 +3131,7 @@ acorn-import-assertions@^1.7.6:
   resolved "https://registry.npmjs.org/acorn-import-assertions/-/acorn-import-assertions-1.8.0.tgz"
   integrity sha512-m7VZ3jwz4eK6A4Vtt8Ew1/mNbP24u0FhdyfA7fSvnJR6LMdfOYnmuIrrJAgrYfYJ10F/otaHTtrtrtmHdMNzEw==
 
-acorn-jsx@^5.3.1:
-  version "5.3.2"
-  resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
-  integrity sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==
-
-acorn-jsx@^5.3.2:
+acorn-jsx@^5.3.1, acorn-jsx@^5.3.2:
   version "5.3.2"
   resolved "https://registry.npmjs.org/acorn-jsx/-/acorn-jsx-5.3.2.tgz"
   integrity sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==
@@ -4240,15 +4206,10 @@ core-js-compat@^3.25.1:
   dependencies:
     browserslist "^4.21.4"
 
-core-js-pure@^3.23.3:
+core-js-pure@^3.23.3, core-js-pure@^3.25.1:
   version "3.26.1"
   resolved "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.26.1.tgz"
   integrity sha512-VVXcDpp/xJ21KdULRq/lXdLzQAtX7+37LzpyfFM973il0tWSsDEoyzG38G14AjTpK9VTfiNM9jnFauq/CpaWGQ==
-
-core-js-pure@^3.25.1:
-  version "3.26.0"
-  resolved "https://registry.npmjs.org/core-js-pure/-/core-js-pure-3.26.0.tgz"
-  integrity sha512-LiN6fylpVBVwT8twhhluD9TzXmZQQsr2I2eIKtWNbZI1XMfBT7CV18itaN6RA7EtQd/SDdRx/wzvAShX2HvhQA==
 
 core-js@^3.19.2:
   version "3.26.1"
@@ -9234,6 +9195,11 @@ react-scripts@5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-uuid@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npmjs.org/react-uuid/-/react-uuid-2.0.0.tgz"
+  integrity sha512-FNUH/8WR/FEtx0Bu6gmt1eONfc413hhvrEXFWUSFGvznUhI4dYoVZA09p7JHoTpnM4WC2D/bG2YSxGKXF4oVLg==
 
 "react@^16.8.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@<18.0.0, "react@>= 16", react@>=16.8, react@18.2.0:
   version "18.2.0"

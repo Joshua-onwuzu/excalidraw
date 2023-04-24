@@ -424,6 +424,7 @@ export const handleUpdatesFromBoardNode = (
     appState: Record<string, any>;
   }) => void,
   rtcKey: ISEAPair,
+  sessionId: string
 ) => {
   /**
    * This listens for changes made on the content node
@@ -434,7 +435,7 @@ export const handleUpdatesFromBoardNode = (
 
     console.log("hitting up");
 
-    if (
+    if (decryptedData.by !== sessionId &&
       JSON.stringify(currentSceneElements) !==
       JSON.stringify(decryptedData.content.elements)
     ) {

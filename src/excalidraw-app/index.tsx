@@ -92,10 +92,13 @@ import { appJotaiStore } from "./app-jotai";
 import "./index.scss";
 import { ResolutionType } from "../utility-types";
 import { ISEAPair } from "gun";
+import uuid from "react-uuid";
 
 polyfill();
 
 window.EXCALIDRAW_THROTTLE_RENDER = true;
+
+const sessionId = uuid();
 
 const languageDetector = new LanguageDetector();
 languageDetector.init({
@@ -504,11 +507,12 @@ const ExcalidrawWrapper = () => {
       elements: readonly ExcalidrawElement[];
       appState: any;
     }) => {
+      console.log({ elements, appState }, "damn");
       excalidrawAPI?.updateScene({
         elements,
         appState,
       });
-      console.log("it should have updated scene ")
+      console.log("it should have updated scene ");
     };
     excalidrawAPI &&
       handleUpdatesFromBoardNode(
@@ -516,10 +520,8 @@ const ExcalidrawWrapper = () => {
         currentSceneElements as NonDeletedExcalidrawElement[],
         callback,
         rtcKey as ISEAPair,
+        sessionId,
       );
-
-
-
 
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {

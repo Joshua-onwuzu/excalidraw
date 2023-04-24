@@ -191,38 +191,37 @@ const initializeScene = async (opts: {
   // }
   console.log(roomLinkData, "data");
   if (roomLinkData) {
-    const { excalidrawAPI } = opts;
 
-    const scene = await opts.collabAPI.startCollaboration(roomLinkData);
+    await opts.collabAPI.startCollaboration(roomLinkData);
 
-    return {
-      // when collaborating, the state may have already been updated at this
-      // point (we may have received updates from other clients), so reconcile
-      // elements and appState with existing state
-      scene: {
-        ...scene,
-        appState: {
-          ...restoreAppState(
-            {
-              ...scene?.appState,
-              theme: scene?.appState?.theme,
-            },
-            excalidrawAPI.getAppState(),
-          ),
-          // necessary if we're invoking from a hashchange handler which doesn't
-          // go through App.initializeScene() that resets this flag
-          isLoading: false,
-        },
-        elements: reconcileElements(
-          scene?.elements || [],
-          excalidrawAPI.getSceneElementsIncludingDeleted(),
-          excalidrawAPI.getAppState(),
-        ),
-      },
-      isExternalScene: true,
-      id: roomLinkData.roomId,
-      key: roomLinkData.roomKey,
-    };
+    // return {
+    //   // when collaborating, the state may have already been updated at this
+    //   // point (we may have received updates from other clients), so reconcile
+    //   // elements and appState with existing state
+    //   scene: {
+    //     ...scene,
+    //     appState: {
+    //       ...restoreAppState(
+    //         {
+    //           ...scene?.appState,
+    //           theme: scene?.appState?.theme,
+    //         },
+    //         excalidrawAPI.getAppState(),
+    //       ),
+    //       // necessary if we're invoking from a hashchange handler which doesn't
+    //       // go through App.initializeScene() that resets this flag
+    //       isLoading: false,
+    //     },
+    //     elements: reconcileElements(
+    //       scene?.elements || [],
+    //       excalidrawAPI.getSceneElementsIncludingDeleted(),
+    //       excalidrawAPI.getAppState(),
+    //     ),
+    //   },
+    //   isExternalScene: true,
+    //   id: roomLinkData.roomId,
+    //   key: roomLinkData.roomKey,
+    // };
   }
   // else if (scene) {
   //   return isExternalScene && jsonBackendMatch

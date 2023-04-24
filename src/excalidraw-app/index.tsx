@@ -508,10 +508,7 @@ const ExcalidrawWrapper = () => {
         elements,
         appState,
       });
-      setPrevWhiteboardContent({
-        elements,
-        appState,
-      });
+      console.log("it should have updated scene ")
     };
     excalidrawAPI &&
       handleUpdatesFromBoardNode(
@@ -520,6 +517,9 @@ const ExcalidrawWrapper = () => {
         callback,
         rtcKey as ISEAPair,
       );
+
+
+
 
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {

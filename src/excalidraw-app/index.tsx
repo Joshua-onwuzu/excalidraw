@@ -109,7 +109,7 @@ const initializeScene = async (opts: {
   collabAPI: CollabAPI;
   excalidrawAPI: ExcalidrawImperativeAPI;
 }) => {
-  console.log(opts, "juice wrld", "average");
+  console.log(opts, "juice wrld", "averagennnnnnnnnn");
   if (!opts.collabAPI || !opts.excalidrawAPI) {
     return;
   }

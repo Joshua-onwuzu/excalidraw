@@ -26,8 +26,7 @@ export const UserList: React.FC<{
     uniqueCollaborators.size > 0 &&
     Array.from(uniqueCollaborators)
       .filter(([_, client]) => {
-        console.log(_, client, "bastards vrt");
-        return Object.keys(client).length !== 0;
+        return Object.keys(client).length !== 0 && _;
       })
       .map(([clientId, collaborator]) => {
         console.log(clientId, collaborator, "mustapha n");

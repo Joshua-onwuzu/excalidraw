@@ -553,6 +553,7 @@ const ExcalidrawWrapper = () => {
     appState: AppState,
     files: BinaryFiles,
   ) => {
+    console.log({elements, appState}, "Nevers say")
     if (collabAPI?.isCollaborating()) {
       collabAPI.syncElements(elements);
     }

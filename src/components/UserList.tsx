@@ -25,7 +25,10 @@ export const UserList: React.FC<{
   const avatars =
     uniqueCollaborators.size > 0 &&
     Array.from(uniqueCollaborators)
-      .filter(([_, client]) => Object.keys(client).length !== 0)
+      .filter(([_, client]) => {
+        console.log(_, client, "bastards vrt");
+        return Object.keys(client).length !== 0;
+      })
       .map(([clientId, collaborator]) => {
         console.log(clientId, collaborator, "mustapha n");
         const avatarJSX = actionManager.renderAction("goToCollaborator", [

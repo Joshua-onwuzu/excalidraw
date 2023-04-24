@@ -400,6 +400,7 @@ export const handleChangesFromWhiteboard = async (
   rtcKey: ISEAPair,
   previousWhiteboardContent: Record<string, any> | undefined,
 ) => {
+  console.log("changes");
   /**
    * Only save changes from whiteboard when whiteboard is not empty
    * and when previously saved whiteboard content is not the same as the new content
@@ -407,6 +408,7 @@ export const handleChangesFromWhiteboard = async (
   const isContentEqualsPrevContent =
     JSON.stringify(content) === JSON.stringify(previousWhiteboardContent);
   if (content.elements.length > 0 && !isContentEqualsPrevContent) {
+    console.log("changes done........");
     const data = {
       content,
     };
@@ -431,10 +433,13 @@ export const handleUpdatesFromBoardNode = (
   draftContentNode.on(async (data: string) => {
     const decryptedData = await Sea.decrypt(data, rtcKey as ISEAPair);
 
+    console.log("hitting up");
+
     if (
       JSON.stringify(currentSceneElements) !==
       JSON.stringify(decryptedData.content.elements)
     ) {
+      console.log("hitting merch");
       const { elements, appState } = decryptedData.content;
       callback({
         elements,

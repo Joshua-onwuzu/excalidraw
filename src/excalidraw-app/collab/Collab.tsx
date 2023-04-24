@@ -396,7 +396,7 @@ class Collab extends PureComponent<Props, CollabState> {
 
   startCollaboration = async (
     existingRoomLinkData: null | { roomId: string; roomKey: string },
-  ): Promise<ImportedDataState | null> => {
+  ) => {
     if (this.portal.socket) {
       return null;
     }
@@ -555,11 +555,11 @@ class Collab extends PureComponent<Props, CollabState> {
         this.portal.socket.off("first-in-room");
       }
       console.log("pami obele")
-      const sceneData = await this.initializeRoom({
-        fetchScene: true,
-        roomLinkData: existingRoomLinkData,
-      });
-      scenePromise.resolve(sceneData);
+      // const sceneData = await this.initializeRoom({
+      //   fetchScene: true,
+      //   roomLinkData: existingRoomLinkData,
+      // });
+      // scenePromise.resolve(sceneData);
     });
 
     this.initializeIdleDetector();
@@ -568,7 +568,7 @@ class Collab extends PureComponent<Props, CollabState> {
       activeRoomLink: window.location.href,
     });
 
-    return scenePromise;
+    // return scenePromise;
   };
 
   private initializeRoom = async ({

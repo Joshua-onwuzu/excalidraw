@@ -29,7 +29,7 @@ export const UserList: React.FC<{
         return Object.keys(client).length !== 0 && _;
       })
       .map(([clientId, collaborator]) => {
-        console.log(clientId, collaborator, "mustapha n");
+        console.log(clientId, collaborator, "mustapha n", "brass");
         const avatarJSX = actionManager.renderAction("goToCollaborator", [
           clientId,
           collaborator,

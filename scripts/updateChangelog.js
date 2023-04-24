@@ -37,7 +37,7 @@ const getLibraryCommitsSinceLastRelease = async () => {
   const commitHash = await getCommitHashForLastVersion();
   console.log(commitHash)
   const { stdout } = await exec(
-    `git log --pretty=format:%s ${commitHash}...main`,
+    `git log --pretty=format:%s d58baf5bb8cb5d859374eee074a275d7445bb3b9...main`,
   );
   const commitsSinceLastRelease = stdout.split("\n");
   const commitList = {};

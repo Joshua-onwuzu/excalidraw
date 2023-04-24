@@ -427,6 +427,7 @@ class Collab extends PureComponent<Props, CollabState> {
       }).then((scene) => {
         console.log("hitting after bastard ibile");
         scenePromise.resolve(scene);
+        console.log("cross out");
       });
     };
     this.fallbackInitializationHandler = fallbackInitializationHandler;

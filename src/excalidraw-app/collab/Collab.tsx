@@ -445,7 +445,7 @@ class Collab extends PureComponent<Props, CollabState> {
         roomKey,
       );
 
-      this.portal.socket.once("connect_error", fallbackInitializationHandler);
+      // this.portal.socket.once("connect_error", fallbackInitializationHandler);
     } catch (error: any) {
       console.error(error);
       this.setState({ errorMessage: error.message });

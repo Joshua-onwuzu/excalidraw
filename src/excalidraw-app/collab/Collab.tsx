@@ -420,6 +420,7 @@ class Collab extends PureComponent<Props, CollabState> {
     this.setIsCollaborating(true);
     LocalData.pauseSave("collaboration");
     const fallbackInitializationHandler = () => {
+      console.log("bastard, ibile");
       this.initializeRoom({
         roomLinkData: existingRoomLinkData,
         fetchScene: true,
@@ -518,7 +519,7 @@ class Collab extends PureComponent<Props, CollabState> {
             const { pointer, button, username, selectedElementIds } =
               decryptedData.payload;
             const socketId: SocketUpdateDataSource["MOUSE_LOCATION"]["payload"]["socketId"] =
-              decryptedData.payload.socketId ||
+              decryptedData.socketId ||
               // @ts-ignore legacy, see #2094 (#2097)
               decryptedData.payload.socketID;
 
@@ -553,6 +554,7 @@ class Collab extends PureComponent<Props, CollabState> {
       if (this.portal.socket) {
         this.portal.socket.off("first-in-room");
       }
+      console.log("pami obele")
       const sceneData = await this.initializeRoom({
         fetchScene: true,
         roomLinkData: existingRoomLinkData,

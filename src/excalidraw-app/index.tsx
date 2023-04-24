@@ -566,7 +566,7 @@ const ExcalidrawWrapper = () => {
       previousWhiteboardContent,
     );
     console.log("hitting benji")
-    // setPrevWhiteboardContent({ elements, appState });
+    setPrevWhiteboardContent({ elements, appState });
 
     // this check is redundant, but since this is a hot path, it's best
     // not to evaludate the nested expression every time

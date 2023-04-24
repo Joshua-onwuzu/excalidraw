@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import "./UserList.scss";
 
 import React from "react";
@@ -28,7 +29,7 @@ export const UserList: React.FC<{
   const bx = Array.from(uniqueCollaborators).filter(([_, client]) => {
     return Object.keys(client).length !== 0 && typeof _ !== "undefined";
   });
-console.log("geeeeeez")
+  console.log("geeeeeez");
   console.log(ox, "free of charge");
   console.log(bx, "mine for rever");
   const avatars =

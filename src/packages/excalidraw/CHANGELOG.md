@@ -21,6 +21,11 @@ Please add the latest change on the top under the correct section.
 **_This section lists the updates made to the excalidraw library and will not affect the integration._**
 
 ---
+## Excalidraw Library
+
+**_This section lists the updates made to the excalidraw library and will not affect the integration._**
+
+---
 ## 0.1.0 (2023-04-19)
 
 ### Docs

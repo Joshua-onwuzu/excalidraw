@@ -361,10 +361,7 @@ const ExcalidrawWrapper = () => {
     //   }
     // };
 
-    // initializeScene({ collabAPI, excalidrawAPI }).then(async (data) => {
-    //   loadImages(data, /* isInitialLoad */ true);
-    //   initialStatePromiseRef.current.promise.resolve(data.scene);
-    // });
+    initializeScene({ collabAPI, excalidrawAPI });
 
     const onHashChange = async (event: HashChangeEvent) => {
       event.preventDefault();
@@ -377,11 +374,6 @@ const ExcalidrawWrapper = () => {
           collabAPI.stopCollaboration(false);
         }
         excalidrawAPI.updateScene({ appState: { isLoading: true } });
-
-        initializeScene({
-          collabAPI: collabAPI as CollabAPI,
-          excalidrawAPI: excalidrawAPI as ExcalidrawImperativeAPI,
-        });
     
 
         // initializeScene({ collabAPI, excalidrawAPI }).then((data) => {

@@ -1,5 +1,5 @@
 {
-  "name": "@onwuzu/excalidraw_v3",
+  "name": "@onwuzu/excalidraw_v2",
   "version": "0.9.1",
   "main": "main.js",
   "types": "types/packages/excalidraw/index.d.ts",

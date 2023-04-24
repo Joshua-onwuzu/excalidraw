@@ -109,6 +109,7 @@ const initializeScene = async (opts: {
   collabAPI: CollabAPI;
   excalidrawAPI: ExcalidrawImperativeAPI;
 }) => {
+  console.log(opts, "juice wrld");
   if (!opts.collabAPI || !opts.excalidrawAPI) {
     return;
   }

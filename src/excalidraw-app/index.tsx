@@ -378,6 +378,12 @@ const ExcalidrawWrapper = () => {
         }
         excalidrawAPI.updateScene({ appState: { isLoading: true } });
 
+        initializeScene({
+          collabAPI: collabAPI as CollabAPI,
+          excalidrawAPI: excalidrawAPI as ExcalidrawImperativeAPI,
+        });
+    
+
         // initializeScene({ collabAPI, excalidrawAPI }).then((data) => {
         //   loadImages(data);
         //   if (data.scene) {
@@ -522,11 +528,6 @@ const ExcalidrawWrapper = () => {
         rtcKey as ISEAPair,
         sessionId,
       );
-
-    initializeScene({
-      collabAPI: collabAPI as CollabAPI,
-      excalidrawAPI: excalidrawAPI as ExcalidrawImperativeAPI,
-    });
 
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {

@@ -559,12 +559,12 @@ const ExcalidrawWrapper = () => {
 
     console.log("hitting on change");
 
-    // await handleChangesFromWhiteboard(
-    //   whiteboardNode,
-    //   { elements, appState },
-    //   rtcKey as ISEAPair,
-    //   previousWhiteboardContent,
-    // );
+    await handleChangesFromWhiteboard(
+      whiteboardNode,
+      { elements, appState },
+      rtcKey as ISEAPair,
+      previousWhiteboardContent,
+    );
     // setPrevWhiteboardContent({ elements, appState });
 
     // this check is redundant, but since this is a hot path, it's best

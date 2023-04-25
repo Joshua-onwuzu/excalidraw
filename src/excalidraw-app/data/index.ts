@@ -17,6 +17,7 @@ import {
   NonDeletedExcalidrawElement,
 } from "../../element/types";
 import { t } from "../../i18n";
+import { Base64 } from "base64-string";
 import Sea from "gun/sea";
 import {
   AppState,
@@ -275,11 +276,19 @@ export const getISEAKeyPair = (
   const keyInUint8Array = convertBase64toUint8Array(key);
   return JSON.parse(new TextDecoder().decode(keyInUint8Array));
 };
+export const resolveCollabRoomKey = (
+  key: string,
+): { seaKeyPair: ISEAPair; roomKey: string } => {
+  const enc = new Base64();
+  const b64 = enc.decode(key);
+  const roomKeyMaterial = JSON.parse(b64);
+  return roomKeyMaterial;
+};
 
 export const getRtcKeyFromUrl = () => {
   const { rtcKey: base64RtcKey } = getRoomInfoFromLink(window.location.href);
-  const key = getISEAKeyPair(base64RtcKey as string);
-  return key;
+  const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
+  return roomKeyMaterial.seaKeyPair;
 };
 
 export const getCollaborationLinkData = (link: string) => {

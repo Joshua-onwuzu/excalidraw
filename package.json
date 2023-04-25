@@ -25,6 +25,7 @@
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/react": "12.1.5",
     "@tldraw/vec": "1.7.1",
+    "base64-string": "1.1.2",
     "browser-fs-access": "0.29.1",
     "clsx": "1.1.1",
     "cross-env": "7.0.3",

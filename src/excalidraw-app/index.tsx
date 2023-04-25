@@ -518,7 +518,8 @@ const ExcalidrawWrapper = ({
       });
       console.log("it should have updated scene ");
     };
-    excalidrawAPI &&
+    if(excalidrawAPI){
+      console.log("saving to whiteboard with rtc key:", rtcKey);
       handleUpdatesFromBoardNode(
         whiteboardNode,
         currentSceneElements as NonDeletedExcalidrawElement[],
@@ -526,6 +527,8 @@ const ExcalidrawWrapper = ({
         rtcKey as ISEAPair,
         sessionId,
       );
+    }
+
 
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {

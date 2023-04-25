@@ -432,6 +432,7 @@ class Collab extends PureComponent<Props, CollabState> {
         if (!this.idTracker.includes(id)) {
           this.idTracker.push(id);
           draft = data;
+          console.log(data, "data bitch")
         }
       });
       console.log(draft!, "drafts");

@@ -469,6 +469,11 @@ class Collab extends PureComponent<Props, CollabState> {
         ({ roomId, roomKey } = await generateCollaborationLinkData());
         const { rtcId, name, portalLock, ownerLock, owner, type } = draft!;
         console.log("hitting else and should update draft metadata", draft!)
+        const lock = await encryptPortalRoomLockUsingRSAKey(
+          roomKey,
+          portalEncryptionKey,
+        )
+        console.log(lock, "backwards should be the portal lock")
         portalDraftMetaDataNode.get(rtcId).put({
           rtcId,
           name,
@@ -476,10 +481,7 @@ class Collab extends PureComponent<Props, CollabState> {
           owner,
           ownerLock,
           type,
-          portalRoomLock: await encryptPortalRoomLockUsingRSAKey(
-            roomKey,
-            portalEncryptionKey,
-          ),
+          portalRoomLock: lock,
         });
         window.history.pushState(
           {},

@@ -31,6 +31,7 @@ import {
 } from "../app_constants";
 import {
   decryptPortalRoomLockUsingRSAKey,
+  encryptPortalRoomLockUsingRSAKey,
   generateCollaborationLinkData,
   getCollaborationLink,
   getCollabServer,
@@ -107,6 +108,7 @@ interface PublicProps {
   excalidrawAPI: ExcalidrawImperativeAPI;
   authKey?: ISEAPair;
   portalDecryptionkey?: string;
+  portalEncryptionKey?: string;
 }
 
 type Props = PublicProps & { modalIsShown: boolean };
@@ -406,6 +408,7 @@ class Collab extends PureComponent<Props, CollabState> {
     existingRoomLinkData: null | { roomId: string; roomKey: string },
     authKey?: ISEAPair,
     portalDecryptionkey?: string,
+    portalEncryptionKey?: string,
   ) => {
     if (this.portal.socket) {
       return null;
@@ -433,6 +436,7 @@ class Collab extends PureComponent<Props, CollabState> {
           this.idTracker.push(id);
           draft = data;
           console.log(data, "data bitch");
+          console.log("this should run again log data", data)
         }
       });
       console.log(draft!, "drafts");
@@ -463,6 +467,13 @@ class Collab extends PureComponent<Props, CollabState> {
         }
       } else {
         ({ roomId, roomKey } = await generateCollaborationLinkData());
+        portalDraftMetaDataNode.get(rtcId).put({
+          ...draft!,
+          portalRoomLock: await encryptPortalRoomLockUsingRSAKey(
+            roomKey,
+            portalEncryptionKey,
+          ),
+        });
         window.history.pushState(
           {},
           APP_NAME,
@@ -915,6 +926,7 @@ class Collab extends PureComponent<Props, CollabState> {
                 null,
                 this.props.authKey,
                 this.props.portalDecryptionkey,
+                this.props.portalEncryptionKey,
               )
             }
             onRoomDestroy={this.stopCollaboration}

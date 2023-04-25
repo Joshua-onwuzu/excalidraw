@@ -213,6 +213,11 @@ export const importRSADecryptionKey = (
 ): Promise<CryptoKey> => {
   return importKey(pemContent, "pkcs8", KeyTypes.RSA, ["decrypt"]);
 };
+export const importRSAEncryptionKey = (
+  pemContent: string,
+): Promise<CryptoKey> => {
+  return importKey(pemContent, "spki", KeyTypes.RSA, ["encrypt"]);
+};
 export const decryptPortalRoomLockUsingRSAKey = async (
   encrypted: string,
   serverDecryptionKey?: string,
@@ -233,6 +238,32 @@ export const decryptPortalRoomLockUsingRSAKey = async (
   );
   const dec = new TextDecoder();
   return dec.decode(decrypted);
+};
+export const encryptPortalRoomLockUsingRSAKey = async (
+  value: string,
+  serverEncryptionKey: string | undefined,
+) => {
+  if (!serverEncryptionKey) {
+    return;
+  }
+  try {
+    const encryptionKey = await importRSAEncryptionKey(serverEncryptionKey);
+    const enc = new TextEncoder();
+    const encoded = enc.encode(JSON.stringify(value));
+    const encrypted = await window.crypto.subtle.encrypt(
+      {
+        name: "RSA-OAEP",
+      },
+      encryptionKey,
+      encoded,
+    );
+    const uint8 = new Uint8Array(encrypted);
+    const base64 = convertTypedArrayToString(uint8);
+    return base64;
+  } catch (error) {
+    console.log(error);
+    throw new Error("error");
+  }
 };
 
 export const getISEAKeyPair = (

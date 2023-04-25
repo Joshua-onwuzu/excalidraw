@@ -414,43 +414,51 @@ class Collab extends PureComponent<Props, CollabState> {
     let roomId;
     let roomKey;
 
-    if (!existingRoomLinkData) {
-      if (authKey) {
-        const gun = instantiateGun();
-        const { contractAddress, roomId: rtcId } = getRoomInfoFromLink(
-          window.location.href,
+    if (!existingRoomLinkData && authKey) {
+      console.log("there is authKey and no lInkdata", authKey);
+      const gun = instantiateGun();
+      const { contractAddress, roomId: rtcId } = getRoomInfoFromLink(
+        window.location.href,
+      );
+      const portalDraftMetaDataNode = gun
+        .user()
+        .auth(authKey)
+        .get(`${contractAddress}/rtc`)
+        .get(rtcId);
+
+      let draft: IDraftMetadata;
+
+      await portalDraftMetaDataNode.on((data: IDraftMetadata, id: any) => {
+        if (!this.idTracker.includes(id)) {
+          this.idTracker.push(id);
+          draft = data;
+        }
+      });
+      console.log(draft!, "drafts");
+      if (draft!) {
+        const key = await decryptPortalRoomLockUsingRSAKey(
+          draft.portalRoomLock,
+          portalDecryptionkey,
         );
-        const portalDraftMetaDataNode = gun
-          .user()
-          .auth(authKey)
-          .get(`${contractAddress}/rtc`)
-          .get(rtcId);
-
-        let draft: IDraftMetadata;
-
-        await portalDraftMetaDataNode.on((data: IDraftMetadata, id: any) => {
-          if (!this.idTracker.includes(id)) {
-            this.idTracker.push(id);
-            draft = data;
-          }
-        });
-        if (draft!) {
-          const key = await decryptPortalRoomLockUsingRSAKey(
-            draft.portalRoomLock,
-            portalDecryptionkey,
+        console.log(key, "dog ibile");
+        if (key) {
+          roomKey = JSON.parse(key);
+          ({ roomId } = getRoomInfoFromLink(window.location.href));
+          window.history.pushState(
+            {},
+            APP_NAME,
+            `${window.location.href}${getCollaborationLink({
+              roomId,
+              roomKey,
+            })}`,
           );
-          if (key) {
-            roomKey = JSON.parse(key);
-            ({ roomId } = getRoomInfoFromLink(window.location.href));
-            window.history.pushState(
-              {},
-              APP_NAME,
-              `${window.location.href}${getCollaborationLink({
-                roomId,
-                roomKey,
-              })}`,
-            );
-          }
+          console.log(
+            `${window.location.href}${getCollaborationLink({
+              roomId,
+              roomKey,
+            })}`,
+            "from collaboration",
+          );
         }
       }
     } else if (existingRoomLinkData) {

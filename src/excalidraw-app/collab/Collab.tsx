@@ -436,7 +436,7 @@ class Collab extends PureComponent<Props, CollabState> {
         }
       });
       console.log(draft!, "drafts");
-      if (draft!) {
+      if (draft! && draft.portalRoomLock) {
         const key = await decryptPortalRoomLockUsingRSAKey(
           draft.portalRoomLock,
           portalDecryptionkey,
@@ -461,6 +461,14 @@ class Collab extends PureComponent<Props, CollabState> {
             "from collaboration",
           );
         }
+      } else {
+        ({ roomId, roomKey } = await generateCollaborationLinkData());
+        window.history.pushState(
+          {},
+          APP_NAME,
+          `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
+        );
+        console.log("at this point it should generate a new key");
       }
     } else if (existingRoomLinkData) {
       ({ roomId, roomKey } = existingRoomLinkData);

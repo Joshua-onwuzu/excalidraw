@@ -282,6 +282,35 @@ export type ExcalidrawInitialDataState = Merge<
   }
 >;
 
+export enum FileSource {
+  USER_FILE_SYSTEM,
+  EXCALIDRAW,
+  COLLAB_DOCUMENT,
+  NOTES,
+}
+
+export enum KeyTypes {
+  RSA = "RSA",
+  AES = "AES",
+}
+export const keyAlgoritms = {
+  [KeyTypes.AES]: "AES-GCM",
+  [KeyTypes.RSA]: {
+    name: "RSA-OAEP",
+    hash: "SHA-256",
+  },
+};
+
+export interface IDraftMetadata {
+  rtcId: string;
+  name: string;
+  portalLock: string;
+  ownerLock: string;
+  portalRoomLock: string;
+  owner: string;
+  type: FileSource;
+}
+
 export interface ExcalidrawProps {
   onChange?: (
     elements: readonly ExcalidrawElement[],

@@ -22,6 +22,8 @@ import {
   AppState,
   BinaryFileData,
   BinaryFiles,
+  keyAlgoritms,
+  KeyTypes,
   UserIdleState,
 } from "../../types";
 import { bytesToHexString } from "../../utils";
@@ -164,11 +166,73 @@ export const getRoomInfoFromLink = (link: string) => {
   const roomKey = urlSearchParams.get("roomKey");
   const isCollaborating = urlSearchParams.get("collab");
   const rtcKey = urlSearchParams.get("key");
-  return { roomId, roomKey, isCollaborating, rtcKey };
+  const path = url.pathname.substring(1, url.pathname.length);
+  const contractAddress = path.substring(0, path.indexOf("/"));
+  return { roomId, roomKey, isCollaborating, rtcKey, contractAddress };
 };
 
 export const convertBase64toUint8Array = (str: string): Uint8Array => {
   return Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+};
+
+export const convertTypedArrayToString = (data: Uint8Array) => {
+  return window.btoa(
+    Array.from(data)
+      .map((c) => String.fromCharCode(c))
+      .join(""),
+  );
+};
+
+export const convertStringToTypedArray = (data: string): Uint8Array => {
+  const binaryString = window.atob(data);
+  const uint8 = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    uint8[i] = binaryString.charCodeAt(i);
+  }
+  return uint8;
+};
+
+export const importKey = (
+  pemContent: string,
+  format: "pkcs8" | "raw" | "spki",
+  keyType: KeyTypes,
+  keyUsage: KeyUsage[],
+): Promise<CryptoKey> => {
+  const uint8Content = convertStringToTypedArray(pemContent);
+  return window.crypto.subtle.importKey(
+    format,
+    uint8Content.buffer,
+    keyAlgoritms[keyType],
+    false,
+    keyUsage,
+  );
+};
+
+export const importRSADecryptionKey = (
+  pemContent: string,
+): Promise<CryptoKey> => {
+  return importKey(pemContent, "pkcs8", KeyTypes.RSA, ["decrypt"]);
+};
+export const decryptPortalRoomLockUsingRSAKey = async (
+  encrypted: string,
+  serverDecryptionKey?: string,
+): Promise<string | undefined> => {
+  if (!serverDecryptionKey) {
+    return;
+  }
+  const decryptionKey = await importRSADecryptionKey(serverDecryptionKey); // import key from the key exported format saved as the invokers server decryption keys
+  const encryptedTypedArray = convertStringToTypedArray(encrypted);
+
+  // decrypt the data that was encrypted with server encryption key (public key)
+  const decrypted = await window.crypto.subtle.decrypt(
+    {
+      name: "RSA-OAEP",
+    },
+    decryptionKey,
+    encryptedTypedArray.buffer, // data encrypted with server encrytion key
+  );
+  const dec = new TextDecoder();
+  return dec.decode(decrypted);
 };
 
 export const getISEAKeyPair = (

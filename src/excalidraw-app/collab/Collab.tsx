@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import throttle from "lodash.throttle";
 import { PureComponent } from "react";
-import { ExcalidrawImperativeAPI } from "../../types";
+import { ExcalidrawImperativeAPI, IDraftMetadata } from "../../types";
 import { ErrorDialog } from "../../components/ErrorDialog";
 import { APP_NAME, ENV, EVENT } from "../../constants";
 import { ImportedDataState } from "../../data/types";
@@ -30,11 +30,14 @@ import {
   SYNC_FULL_SCENE_INTERVAL_MS,
 } from "../app_constants";
 import {
+  decryptPortalRoomLockUsingRSAKey,
   generateCollaborationLinkData,
   getCollaborationLink,
   getCollabServer,
   getLinkFormatedUrl,
+  getRoomInfoFromLink,
   getSyncableElements,
+  instantiateGun,
   SocketUpdateDataSource,
   SyncableExcalidrawElement,
 } from "../data";
@@ -74,6 +77,7 @@ import { resetBrowserStateVersions } from "../data/tabSync";
 import { LocalData } from "../data/LocalData";
 import { atom, useAtom } from "jotai";
 import { appJotaiStore } from "../app-jotai";
+import { ISEAPair } from "gun";
 
 export const collabAPIAtom = atom<CollabAPI | null>(null);
 export const collabDialogShownAtom = atom(false);
@@ -101,6 +105,8 @@ export interface CollabAPI {
 
 interface PublicProps {
   excalidrawAPI: ExcalidrawImperativeAPI;
+  authKey?: ISEAPair;
+  portalDecryptionkey?: string;
 }
 
 type Props = PublicProps & { modalIsShown: boolean };
@@ -212,6 +218,8 @@ class Collab extends PureComponent<Props, CollabState> {
   }
 
   isCollaborating = () => appJotaiStore.get(isCollaboratingAtom)!;
+
+  private idTracker: any[] = [];
 
   private setIsCollaborating = (isCollaborating: boolean) => {
     appJotaiStore.set(isCollaboratingAtom, isCollaborating);
@@ -396,6 +404,8 @@ class Collab extends PureComponent<Props, CollabState> {
 
   startCollaboration = async (
     existingRoomLinkData: null | { roomId: string; roomKey: string },
+    authKey?: ISEAPair,
+    portalDecryptionkey?: string,
   ) => {
     if (this.portal.socket) {
       return null;
@@ -404,7 +414,46 @@ class Collab extends PureComponent<Props, CollabState> {
     let roomId;
     let roomKey;
 
-    if (existingRoomLinkData) {
+    if (!existingRoomLinkData) {
+      if (authKey) {
+        const gun = instantiateGun();
+        const { contractAddress, roomId: rtcId } = getRoomInfoFromLink(
+          window.location.href,
+        );
+        const portalDraftMetaDataNode = gun
+          .user()
+          .auth(authKey)
+          .get(`${contractAddress}/rtc`)
+          .get(rtcId);
+
+        let draft: IDraftMetadata;
+
+        await portalDraftMetaDataNode.on((data: IDraftMetadata, id: any) => {
+          if (!this.idTracker.includes(id)) {
+            this.idTracker.push(id);
+            draft = data;
+          }
+        });
+        if (draft!) {
+          const key = await decryptPortalRoomLockUsingRSAKey(
+            draft.portalRoomLock,
+            portalDecryptionkey,
+          );
+          if (key) {
+            roomKey = JSON.parse(key);
+            ({ roomId } = getRoomInfoFromLink(window.location.href));
+            window.history.pushState(
+              {},
+              APP_NAME,
+              `${window.location.href}${getCollaborationLink({
+                roomId,
+                roomKey,
+              })}`,
+            );
+          }
+        }
+      }
+    } else if (existingRoomLinkData) {
       ({ roomId, roomKey } = existingRoomLinkData);
     } else {
       ({ roomId, roomKey } = await generateCollaborationLinkData());
@@ -414,7 +463,6 @@ class Collab extends PureComponent<Props, CollabState> {
         `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
       );
     }
-
     const scenePromise = resolvablePromise<ImportedDataState | null>();
 
     this.setIsCollaborating(true);
@@ -441,7 +489,7 @@ class Collab extends PureComponent<Props, CollabState> {
             ? ["websocket", "polling"]
             : ["websocket"],
         }),
-        roomId,
+        roomId as string,
         roomKey,
       );
 
@@ -556,7 +604,7 @@ class Collab extends PureComponent<Props, CollabState> {
       if (this.portal.socket) {
         this.portal.socket.off("first-in-room");
       }
-      console.log("pami obele")
+      console.log("pami obele");
       // const sceneData = await this.initializeRoom({
       //   fetchScene: true,
       //   roomLinkData: existingRoomLinkData,
@@ -612,7 +660,7 @@ class Collab extends PureComponent<Props, CollabState> {
       //   // log the error and move on. other peers will sync us the scene.
       //   console.error(error);
       // } finally {
-        this.portal.socketInitialized = true;
+      this.portal.socketInitialized = true;
       // }
     } else {
       this.portal.socketInitialized = true;
@@ -845,7 +893,13 @@ class Collab extends PureComponent<Props, CollabState> {
             activeRoomLink={activeRoomLink}
             username={username}
             onUsernameChange={this.onUsernameChange}
-            onRoomCreate={() => this.startCollaboration(null)}
+            onRoomCreate={() =>
+              this.startCollaboration(
+                null,
+                this.props.authKey,
+                this.props.portalDecryptionkey,
+              )
+            }
             onRoomDestroy={this.stopCollaboration}
             setErrorMessage={(errorMessage) => {
               this.setState({ errorMessage });

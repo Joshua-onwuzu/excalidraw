@@ -32,6 +32,7 @@ import {
   ExcalidrawImperativeAPI,
   BinaryFiles,
   ExcalidrawInitialDataState,
+  IDraftMetadata,
 } from "../types";
 import {
   debounce,
@@ -108,6 +109,7 @@ languageDetector.init({
 const initializeScene = async (opts: {
   collabAPI: CollabAPI;
   excalidrawAPI: ExcalidrawImperativeAPI;
+  authKey?: ISEAPair;
 }) => {
   console.log(opts, "juice wrld", "averagennnnnnnnnn");
   if (!opts.collabAPI || !opts.excalidrawAPI) {
@@ -189,9 +191,7 @@ const initializeScene = async (opts: {
   //     };
   //   }
   // }
-  console.log(roomLinkData, "data");
   if (roomLinkData) {
-
     await opts.collabAPI.startCollaboration(roomLinkData);
 
     // return {
@@ -241,7 +241,13 @@ export const appLangCodeAtom = atom(
   Array.isArray(detectedLangCode) ? detectedLangCode[0] : detectedLangCode,
 );
 
-const ExcalidrawWrapper = () => {
+const ExcalidrawWrapper = ({
+  authKey,
+  portalDecryptionkey,
+}: {
+  authKey?: ISEAPair;
+  portalDecryptionkey?: string;
+}) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [langCode, setLangCode] = useAtom(appLangCodeAtom);
   const [previousWhiteboardContent, setPrevWhiteboardContent] =
@@ -360,7 +366,7 @@ const ExcalidrawWrapper = () => {
     //   }
     // };
 
-    initializeScene({ collabAPI, excalidrawAPI });
+    initializeScene({ collabAPI, excalidrawAPI, authKey });
 
     const onHashChange = async (event: HashChangeEvent) => {
       event.preventDefault();
@@ -373,7 +379,6 @@ const ExcalidrawWrapper = () => {
           collabAPI.stopCollaboration(false);
         }
         excalidrawAPI.updateScene({ appState: { isLoading: true } });
-    
 
         // initializeScene({ collabAPI, excalidrawAPI }).then((data) => {
         //   loadImages(data);
@@ -721,7 +726,13 @@ const ExcalidrawWrapper = () => {
           </div>
         )}
       </Excalidraw>
-      {excalidrawAPI && <Collab excalidrawAPI={excalidrawAPI} />}
+      {excalidrawAPI && (
+        <Collab
+          authKey={authKey}
+          portalDecryptionkey={portalDecryptionkey}
+          excalidrawAPI={excalidrawAPI}
+        />
+      )}
       {errorMessage && (
         <ErrorDialog onClose={() => setErrorMessage("")}>
           {errorMessage}
@@ -731,11 +742,20 @@ const ExcalidrawWrapper = () => {
   );
 };
 
-const ExcalidrawApp = () => {
+const ExcalidrawApp = ({
+  authKey,
+  portalDecryptionkey,
+}: {
+  authKey?: ISEAPair;
+  portalDecryptionkey?: string;
+}) => {
   return (
     <TopErrorBoundary>
       <Provider unstable_createStore={() => appJotaiStore}>
-        <ExcalidrawWrapper />
+        <ExcalidrawWrapper
+          authKey={authKey}
+          portalDecryptionkey={portalDecryptionkey}
+        />
       </Provider>
     </TopErrorBoundary>
   );

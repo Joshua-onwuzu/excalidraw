@@ -192,7 +192,7 @@ const initializeScene = async (opts: {
   //   }
   // }
   if (isCollaborating) {
-    await opts.collabAPI.startCollaboration();
+    await opts.collabAPI.startCollaboration(isCollaborating);
 
     // return {
     //   // when collaborating, the state may have already been updated at this

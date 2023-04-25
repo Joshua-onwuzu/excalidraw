@@ -406,6 +406,7 @@ class Collab extends PureComponent<Props, CollabState> {
   private fallbackInitializationHandler: null | (() => any) = null;
 
   startCollaboration = async (
+    isCollaborating: boolean,
     authKey?: ISEAPair,
     portalDecryptionkey?: string,
     portalEncryptionKey?: string,
@@ -416,6 +417,14 @@ class Collab extends PureComponent<Props, CollabState> {
 
     const { roomId } = getRoomInfoFromLink(window.location.href);
     const roomKey = getRoomKeyFromUrl();
+
+    if (isCollaborating) {
+      window.history.pushState(
+        {},
+        APP_NAME,
+        `${window.location.href}&collab=true`,
+      );
+    }
 
     // if (!existingRoomLinkData && authKey) {
     //   console.log("there is authKey and no lInkdata", authKey);
@@ -952,6 +961,7 @@ class Collab extends PureComponent<Props, CollabState> {
             onUsernameChange={this.onUsernameChange}
             onRoomCreate={() =>
               this.startCollaboration(
+                false,
                 this.props.authKey,
                 this.props.portalDecryptionkey,
                 this.props.portalEncryptionKey,

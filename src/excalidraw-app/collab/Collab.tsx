@@ -440,7 +440,7 @@ class Collab extends PureComponent<Props, CollabState> {
         }
       });
       console.log(draft!, "drafts");
-      if (draft! && draft.portalRoomLock) {
+      if (draft!) {
         if (draft.portalRoomLock) {
           const key = await decryptPortalRoomLockUsingRSAKey(
             draft.portalRoomLock,
@@ -495,6 +495,7 @@ class Collab extends PureComponent<Props, CollabState> {
           console.log("at this point it should generate a new key");
         }
       } else {
+        console.log("no draftss", draft!)
       }
     } else if (existingRoomLinkData) {
       ({ roomId, roomKey } = existingRoomLinkData);

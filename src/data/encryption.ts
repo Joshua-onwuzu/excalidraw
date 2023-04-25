@@ -50,8 +50,10 @@ export const encryptData = async (
   key: string | CryptoKey,
   data: Uint8Array | ArrayBuffer | Blob | File | string,
 ): Promise<{ encryptedBuffer: ArrayBuffer; iv: Uint8Array }> => {
+  console.log(key, "key from encrypted data");
   const importedKey =
     typeof key === "string" ? await getCryptoKey(key, "encrypt") : key;
+  console.log(importedKey, "imported key");
   const iv = createIV();
   const buffer: ArrayBuffer | Uint8Array =
     typeof data === "string"

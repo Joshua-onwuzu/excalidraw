@@ -88,6 +88,7 @@ class Portal {
       console.log(data, "data from socket");
       const json = JSON.stringify(data);
       console.log(json, "data from socket json");
+      console.log(this.roomKey, "hu goes")
       const encoded = new TextEncoder().encode(json);
       const { encryptedBuffer, iv } = await encryptData(this.roomKey!, encoded);
 

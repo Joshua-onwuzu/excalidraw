@@ -483,6 +483,18 @@ class Collab extends PureComponent<Props, CollabState> {
               roomKey,
             })}`,
           );
+          console.log(
+            {
+              rtcId,
+              name,
+              portalLock,
+              owner,
+              ownerLock,
+              type,
+              portalRoomLock: lock,
+            },
+            "what that is to be saved",
+          );
           await portalDraftMetaDataNode.get(rtcId).put({
             rtcId,
             name,

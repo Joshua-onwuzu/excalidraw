@@ -128,7 +128,7 @@ const initializeScene = async (opts: {
   //   scrollToContent?: boolean;
   // } = await loadScene(null, null, localDataState);
 
-  const roomLinkData = getCollaborationLinkData(window.location.href);
+  const isCollaborating = getCollaborationLinkData(window.location.href);
   // const isExternalScene = !!(id || jsonBackendMatch || roomLinkData);
   // if (isExternalScene) {
   //   if (
@@ -191,8 +191,8 @@ const initializeScene = async (opts: {
   //     };
   //   }
   // }
-  if (roomLinkData) {
-    await opts.collabAPI.startCollaboration(roomLinkData);
+  if (isCollaborating) {
+    await opts.collabAPI.startCollaboration();
 
     // return {
     //   // when collaborating, the state may have already been updated at this

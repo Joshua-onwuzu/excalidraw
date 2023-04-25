@@ -164,12 +164,11 @@ export const getRoomInfoFromLink = (link: string) => {
   const roomId = url.pathname
     .substring(url.pathname.lastIndexOf("/"))
     .replace("/", "");
-  const roomKey = urlSearchParams.get("roomKey");
   const isCollaborating = urlSearchParams.get("collab");
   const rtcKey = urlSearchParams.get("key");
   const path = url.pathname.substring(1, url.pathname.length);
   const contractAddress = path.substring(0, path.indexOf("/"));
-  return { roomId, roomKey, isCollaborating, rtcKey, contractAddress };
+  return { roomId, isCollaborating, rtcKey, contractAddress };
 };
 
 export const convertBase64toUint8Array = (str: string): Uint8Array => {
@@ -290,12 +289,17 @@ export const getRtcKeyFromUrl = () => {
   const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
   return roomKeyMaterial.seaKeyPair;
 };
+export const getRoomKeyFromUrl = () => {
+  const { rtcKey: base64RtcKey } = getRoomInfoFromLink(window.location.href);
+  const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
+  return roomKeyMaterial.roomKey;
+}
 
 export const getCollaborationLinkData = (link: string) => {
-  const { roomId, roomKey, isCollaborating } = getRoomInfoFromLink(link);
+  const { roomId, isCollaborating } = getRoomInfoFromLink(link);
 
-  if (roomId && roomKey && isCollaborating === "true") {
-    return { roomId, roomKey };
+  if (roomId && isCollaborating === "true") {
+    return true;
   }
   return null;
 };

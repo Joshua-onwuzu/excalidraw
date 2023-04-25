@@ -441,14 +441,49 @@ class Collab extends PureComponent<Props, CollabState> {
       });
       console.log(draft!, "drafts");
       if (draft! && draft.portalRoomLock) {
-        const key = await decryptPortalRoomLockUsingRSAKey(
-          draft.portalRoomLock,
-          portalDecryptionkey,
-        );
-        console.log(key, "dog ibile");
-        if (key) {
-          roomKey = JSON.parse(key);
-          ({ roomId } = getRoomInfoFromLink(window.location.href));
+        if (draft.portalRoomLock) {
+          const key = await decryptPortalRoomLockUsingRSAKey(
+            draft.portalRoomLock,
+            portalDecryptionkey,
+          );
+          console.log(key, "dog ibile");
+          if (key) {
+            roomKey = JSON.parse(key);
+            ({ roomId } = getRoomInfoFromLink(window.location.href));
+            window.history.pushState(
+              {},
+              APP_NAME,
+              `${window.location.href}${getCollaborationLink({
+                roomId,
+                roomKey,
+              })}`,
+            );
+            console.log(
+              `${window.location.href}${getCollaborationLink({
+                roomId,
+                roomKey,
+              })}`,
+              "from collaboration",
+            );
+          }
+        } else {
+          ({ roomId, roomKey } = await generateCollaborationLinkData());
+          const { rtcId, name, portalLock, ownerLock, owner, type } = draft!;
+          console.log("hitting else and should update draft metadata", draft!);
+          const lock = await encryptPortalRoomLockUsingRSAKey(
+            roomKey,
+            portalEncryptionKey,
+          );
+          console.log(lock, "backwards should be the portal lock");
+          await portalDraftMetaDataNode.get(rtcId).put({
+            rtcId,
+            name,
+            portalLock,
+            owner,
+            ownerLock,
+            type,
+            portalRoomLock: lock,
+          });
           window.history.pushState(
             {},
             APP_NAME,
@@ -457,38 +492,9 @@ class Collab extends PureComponent<Props, CollabState> {
               roomKey,
             })}`,
           );
-          console.log(
-            `${window.location.href}${getCollaborationLink({
-              roomId,
-              roomKey,
-            })}`,
-            "from collaboration",
-          );
+          console.log("at this point it should generate a new key");
         }
       } else {
-        ({ roomId, roomKey } = await generateCollaborationLinkData());
-        const { rtcId, name, portalLock, ownerLock, owner, type } = draft!;
-        console.log("hitting else and should update draft metadata", draft!);
-        const lock = await encryptPortalRoomLockUsingRSAKey(
-          roomKey,
-          portalEncryptionKey,
-        );
-        console.log(lock, "backwards should be the portal lock");
-        portalDraftMetaDataNode.get(rtcId).put({
-          rtcId,
-          name,
-          portalLock,
-          owner,
-          ownerLock,
-          type,
-          portalRoomLock: lock,
-        });
-        window.history.pushState(
-          {},
-          APP_NAME,
-          `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
-        );
-        console.log("at this point it should generate a new key");
       }
     } else if (existingRoomLinkData) {
       ({ roomId, roomKey } = existingRoomLinkData);

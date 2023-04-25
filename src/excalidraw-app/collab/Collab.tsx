@@ -418,7 +418,7 @@ class Collab extends PureComponent<Props, CollabState> {
     const { roomId } = getRoomInfoFromLink(window.location.href);
     const roomKey = getRoomKeyFromUrl();
 
-    if (isCollaborating) {
+    if (!isCollaborating) {
       window.history.pushState(
         {},
         APP_NAME,

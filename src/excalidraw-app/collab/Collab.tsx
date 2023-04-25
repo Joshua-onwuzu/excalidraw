@@ -548,7 +548,7 @@ class Collab extends PureComponent<Props, CollabState> {
 
     try {
       const socketServerData = await getCollabServer();
-
+console.log(roomKey, "before opening portal roomKety")
       this.portal.socket = this.portal.open(
         socketIOClient(socketServerData.url, {
           transports: socketServerData.polling

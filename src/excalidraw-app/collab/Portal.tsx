@@ -37,7 +37,7 @@ class Portal {
     this.roomId = id;
     this.roomKey = key;
 
-    console.log(key, "key from socket");
+    console.log(key, "roomkey from open socket");
 
     // Initialize socket listeners
     this.socket.on("init-room", () => {

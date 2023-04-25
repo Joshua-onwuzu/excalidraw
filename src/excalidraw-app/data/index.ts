@@ -291,7 +291,9 @@ export const getRtcKeyFromUrl = () => {
 };
 export const getRoomKeyFromUrl = () => {
   const { rtcKey: base64RtcKey } = getRoomInfoFromLink(window.location.href);
+  console.log(base64RtcKey, "base64 rtc key");
   const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
+  console.log(roomKeyMaterial, "roooooom material");
   return roomKeyMaterial.roomKey;
 }
 

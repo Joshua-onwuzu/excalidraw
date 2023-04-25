@@ -244,9 +244,11 @@ export const appLangCodeAtom = atom(
 const ExcalidrawWrapper = ({
   authKey,
   portalDecryptionkey,
+  portalEncryptionKey,
 }: {
   authKey?: ISEAPair;
   portalDecryptionkey?: string;
+  portalEncryptionKey?: string;
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [langCode, setLangCode] = useAtom(appLangCodeAtom);
@@ -731,6 +733,7 @@ const ExcalidrawWrapper = ({
           authKey={authKey}
           portalDecryptionkey={portalDecryptionkey}
           excalidrawAPI={excalidrawAPI}
+          portalEncryptionKey={portalEncryptionKey}
         />
       )}
       {errorMessage && (
@@ -745,9 +748,11 @@ const ExcalidrawWrapper = ({
 const ExcalidrawApp = ({
   authKey,
   portalDecryptionkey,
+  portalEncryptionKey,
 }: {
   authKey?: ISEAPair;
   portalDecryptionkey?: string;
+  portalEncryptionKey?: string;
 }) => {
   return (
     <TopErrorBoundary>
@@ -755,6 +760,7 @@ const ExcalidrawApp = ({
         <ExcalidrawWrapper
           authKey={authKey}
           portalDecryptionkey={portalDecryptionkey}
+          portalEncryptionKey={portalEncryptionKey}
         />
       </Provider>
     </TopErrorBoundary>

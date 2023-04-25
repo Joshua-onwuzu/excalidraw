@@ -475,14 +475,6 @@ class Collab extends PureComponent<Props, CollabState> {
             portalEncryptionKey,
           );
           console.log(lock, "backwards should be the portal lock");
-          window.history.pushState(
-            {},
-            APP_NAME,
-            `${window.location.href}${getCollaborationLink({
-              roomId,
-              roomKey,
-            })}`,
-          );
           console.log(
             {
               rtcId,
@@ -520,6 +512,7 @@ class Collab extends PureComponent<Props, CollabState> {
         `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
       );
     }
+
     const scenePromise = resolvablePromise<ImportedDataState | null>();
 
     this.setIsCollaborating(true);

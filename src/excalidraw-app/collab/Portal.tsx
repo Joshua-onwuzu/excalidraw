@@ -85,7 +85,9 @@ class Portal {
     volatile: boolean = false,
   ) {
     if (this.isOpen()) {
+      console.log(data, "data from socket");
       const json = JSON.stringify(data);
+      console.log(json, "data from socket json");
       const encoded = new TextEncoder().encode(json);
       const { encryptedBuffer, iv } = await encryptData(this.roomKey!, encoded);
 

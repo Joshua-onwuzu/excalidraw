@@ -436,7 +436,7 @@ class Collab extends PureComponent<Props, CollabState> {
           this.idTracker.push(id);
           draft = data;
           console.log(data, "data bitch");
-          console.log("this should run again log data", data)
+          console.log("this should run again log data", data);
         }
       });
       console.log(draft!, "drafts");
@@ -467,8 +467,15 @@ class Collab extends PureComponent<Props, CollabState> {
         }
       } else {
         ({ roomId, roomKey } = await generateCollaborationLinkData());
+        const { rtcId, name, portalLock, ownerLock, owner, type } = draft!;
+        console.log("hitting else and should update draft metadata", draft!)
         portalDraftMetaDataNode.get(rtcId).put({
-          ...draft!,
+          rtcId,
+          name,
+          portalLock,
+          owner,
+          ownerLock,
+          type,
           portalRoomLock: await encryptPortalRoomLockUsingRSAKey(
             roomKey,
             portalEncryptionKey,

@@ -44,7 +44,6 @@ const getLibraryCommitsSinceLastRelease = async () => {
   supportedTypes.forEach((type) => {
     commitList[type] = [];
   });
-
   commitsSinceLastRelease.forEach((commit) => {
     const indexOfColon = commit.indexOf(":");
     const type = commit.slice(0, indexOfColon);

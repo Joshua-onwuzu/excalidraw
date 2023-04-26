@@ -107,9 +107,6 @@ export interface CollabAPI {
 
 interface PublicProps {
   excalidrawAPI: ExcalidrawImperativeAPI;
-  authKey?: ISEAPair;
-  portalDecryptionkey?: string;
-  portalEncryptionKey?: string;
 }
 
 type Props = PublicProps & { modalIsShown: boolean };
@@ -405,12 +402,7 @@ class Collab extends PureComponent<Props, CollabState> {
 
   private fallbackInitializationHandler: null | (() => any) = null;
 
-  startCollaboration = async (
-    isCollaborating: boolean,
-    authKey?: ISEAPair,
-    portalDecryptionkey?: string,
-    portalEncryptionKey?: string,
-  ) => {
+  startCollaboration = async (isCollaborating: boolean) => {
     if (this.portal.socket) {
       return null;
     }
@@ -548,7 +540,7 @@ class Collab extends PureComponent<Props, CollabState> {
 
     try {
       const socketServerData = await getCollabServer();
-console.log(roomKey, "before opening portal roomKety")
+      console.log(roomKey, "before opening portal roomKety");
       this.portal.socket = this.portal.open(
         socketIOClient(socketServerData.url, {
           transports: socketServerData.polling
@@ -959,14 +951,7 @@ console.log(roomKey, "before opening portal roomKety")
             activeRoomLink={activeRoomLink}
             username={username}
             onUsernameChange={this.onUsernameChange}
-            onRoomCreate={() =>
-              this.startCollaboration(
-                false,
-                this.props.authKey,
-                this.props.portalDecryptionkey,
-                this.props.portalEncryptionKey,
-              )
-            }
+            onRoomCreate={() => this.startCollaboration(false)}
             onRoomDestroy={this.stopCollaboration}
             setErrorMessage={(errorMessage) => {
               this.setState({ errorMessage });

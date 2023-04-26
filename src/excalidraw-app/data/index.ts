@@ -286,6 +286,9 @@ export const resolveCollabRoomKey = (
 
 export const getRtcKeyFromUrl = () => {
   const { rtcKey: base64RtcKey } = getRoomInfoFromLink(window.location.href);
+  if (!base64RtcKey) {
+    return;
+  }
   const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
   return roomKeyMaterial.seaKeyPair;
 };
@@ -295,7 +298,7 @@ export const getRoomKeyFromUrl = () => {
   const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
   console.log(roomKeyMaterial, "roooooom material");
   return roomKeyMaterial.roomKey;
-}
+};
 
 export const getCollaborationLinkData = (link: string) => {
   const { roomId, isCollaborating } = getRoomInfoFromLink(link);

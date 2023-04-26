@@ -709,7 +709,7 @@ const ExcalidrawWrapper = ({
             return null;
           }
           return (
-            <div className="flex">
+            <div className="custom-tool">
               <LiveCollaborationTrigger
                 isCollaborating={isCollaborating}
                 onSelect={() => setCollabDialogShown(true)}

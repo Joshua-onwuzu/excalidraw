@@ -350,6 +350,8 @@ const LayerUI = ({
 
   const [hostSidebarCounters] = useAtom(hostSidebarCountersAtom, jotaiScope);
 
+  console.log(appState, "appy");
+
   const layerUIJSX = (
     <>
       {/* ------------------------- tunneled UI ---------------------------- */}

@@ -529,8 +529,14 @@ const getLinearElementEdgeCoors = (
 const getElligibleElementsForBindableElementAndWhere = (
   bindableElement: NonDeleted<ExcalidrawBindableElement>,
 ): SuggestedPointBinding[] => {
-  console.log(bindableElement, "bindable element")
-  console.log("Scene.getScene(bindableElement)", Scene.getScene(bindableElement))
+  console.log(bindableElement, "bindable element");
+  console.log(
+    "Scene.getScene(bindableElement)",
+    Scene.getScene(bindableElement),
+  );
+  if (!Scene.getScene(bindableElement)) {
+    return [];
+  }
   return Scene.getScene(bindableElement)!
     .getNonDeletedElements()
     .map((element) => {

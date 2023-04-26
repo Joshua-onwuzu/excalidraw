@@ -518,7 +518,7 @@ const ExcalidrawWrapper = ({
       });
       console.log("it should have updated scene ");
     };
-    if(excalidrawAPI){
+    if (excalidrawAPI) {
       console.log("saving to whiteboard with rtc key:", rtcKey);
       handleUpdatesFromBoardNode(
         whiteboardNode,
@@ -528,7 +528,6 @@ const ExcalidrawWrapper = ({
         sessionId,
       );
     }
-
 
     window.addEventListener(EVENT.BEFORE_UNLOAD, unloadHandler);
     return () => {
@@ -712,10 +711,13 @@ const ExcalidrawWrapper = ({
             return null;
           }
           return (
-            <LiveCollaborationTrigger
-              isCollaborating={isCollaborating}
-              onSelect={() => setCollabDialogShown(true)}
-            />
+            <div>
+              <LiveCollaborationTrigger
+                isCollaborating={isCollaborating}
+                onSelect={() => setCollabDialogShown(true)}
+              />
+              <span>SPPOON </span>
+            </div>
           );
         }}
       >

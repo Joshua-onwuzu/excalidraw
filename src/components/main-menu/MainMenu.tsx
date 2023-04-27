@@ -10,7 +10,6 @@ import * as DefaultItems from "./DefaultItems";
 
 import { UserList } from "../UserList";
 import { t } from "../../i18n";
-import { HamburgerMenuIcon } from "../icons";
 import { withInternalFallback } from "../hoc/withInternalFallback";
 import { composeEventHandlers } from "../../utils";
 import { useTunnels } from "../context/tunnels";
@@ -23,6 +22,8 @@ const MainMenu = Object.assign(
       onSelect,
       isPortalCollaborator,
       onTitleInputChange,
+      onBackButtonClicked,
+      draftName,
     }: {
       children?: React.ReactNode;
       /**
@@ -31,6 +32,8 @@ const MainMenu = Object.assign(
       onSelect?: (event: Event) => void;
       isPortalCollaborator?: boolean;
       onTitleInputChange?: (e: any) => void;
+      onBackButtonClicked?: () => void;
+      draftName?: string;
     }) => {
       const { mainMenuTunnel } = useTunnels();
       const device = useDevice();
@@ -44,15 +47,23 @@ const MainMenu = Object.assign(
         <mainMenuTunnel.In>
           <DropdownMenu open={appState.openMenu === "canvas"}>
             <DropdownMenu.Trigger
-              onToggle={() => {
-                setAppState({
-                  openMenu: appState.openMenu === "canvas" ? null : "canvas",
-                });
-              }}
+              onBackButtonClicked={onBackButtonClicked}
               isPortalCollaborator={isPortalCollaborator || false}
               onTitleInputChange={onTitleInputChange}
+              draftName={draftName}
             >
-              {HamburgerMenuIcon}
+              <svg
+                width="18"
+                height="29"
+                viewBox="0 0 18 29"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17.1297 3.17298L14.6498 0.707031L0.871094 14.4996L14.6637 28.2922L17.1297 25.8262L5.803 14.4996L17.1297 3.17298Z"
+                  fill="black"
+                />
+              </svg>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content
               onClickOutside={onClickOutside}

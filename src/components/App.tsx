@@ -566,6 +566,8 @@ class App extends React.Component<AppProps, AppState> {
       renderCustomStats,
       isPortalCollaborator,
       onTitleInputChange,
+      onBackButtonClicked,
+      draftName,
     } = this.props;
 
     return (
@@ -597,12 +599,14 @@ class App extends React.Component<AppProps, AppState> {
                       canvas={this.canvas}
                       appState={this.state}
                       files={this.files}
+                      draftName={draftName}
                       setAppState={this.setAppState}
                       actionManager={this.actionManager}
                       elements={this.scene.getNonDeletedElements()}
                       onLockToggle={this.toggleLock}
                       onPenModeToggle={this.togglePenMode}
                       onHandToolToggle={this.onHandToolToggle}
+                      onBackButtonClicked={onBackButtonClicked}
                       onInsertElements={(elements) =>
                         this.addElementsFromPasteOrLibrary({
                           elements,

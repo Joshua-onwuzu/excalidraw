@@ -51,11 +51,13 @@ interface LayerUIProps {
   actionManager: ActionManager;
   appState: AppState;
   files: BinaryFiles;
+  draftName: string;
   canvas: HTMLCanvasElement | null;
   setAppState: React.Component<any, AppState>["setState"];
   elements: readonly NonDeletedExcalidrawElement[];
   onLockToggle: () => void;
   onHandToolToggle: () => void;
+  onBackButtonClicked: () => void;
   onPenModeToggle: () => void;
   onInsertElements: (elements: readonly NonDeletedExcalidrawElement[]) => void;
   showExitZenModeBtn: boolean;
@@ -79,12 +81,22 @@ const DefaultMainMenu: React.FC<{
   UIOptions: AppProps["UIOptions"];
   isPortalCollaborator: boolean;
   onTitleInputChange: (e: any) => void;
-}> = ({ UIOptions, isPortalCollaborator, onTitleInputChange }) => {
+  onBackButtonClicked: () => void;
+  draftName: string;
+}> = ({
+  UIOptions,
+  isPortalCollaborator,
+  onTitleInputChange,
+  onBackButtonClicked,
+  draftName,
+}) => {
   return (
     <MainMenu
       onTitleInputChange={onTitleInputChange}
       isPortalCollaborator={isPortalCollaborator}
+      onBackButtonClicked={onBackButtonClicked}
       __fallback
+      draftName={draftName}
     >
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />
@@ -132,6 +144,8 @@ const LayerUI = ({
   children,
   isPortalCollaborator,
   onTitleInputChange,
+  onBackButtonClicked,
+  draftName,
 }: LayerUIProps) => {
   const device = useDevice();
   const tunnels = useInitializeTunnels();
@@ -377,6 +391,8 @@ const LayerUI = ({
         isPortalCollaborator={isPortalCollaborator}
         UIOptions={UIOptions}
         onTitleInputChange={onTitleInputChange}
+        onBackButtonClicked={onBackButtonClicked}
+        draftName={draftName}
       />
       {/* ------------------------------------------------------------------ */}
 

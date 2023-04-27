@@ -186,7 +186,6 @@ export const LibraryMenuHeader: React.FC<{
       <DropdownMenu open={isLibraryMenuOpen}>
         <DropdownMenu.Trigger
           className="Sidebar__dropdown-btn"
-          onToggle={() => setIsLibraryMenuOpen(!isLibraryMenuOpen)}
           isPortalCollaborator={isPortalCollaborator}
           onTitleInputChange={onTitleInputChange}
         >

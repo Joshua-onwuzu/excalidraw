@@ -8,11 +8,15 @@ export const AppMainMenu: React.FC<{
   isCollaborating: boolean;
   onTitleInputChange?: (e: any) => void;
   isPortalCollaborator?: boolean;
+  onBackButtonClicked?: () => void;
+  draftName?: string;
 }> = React.memo((props) => {
   return (
     <MainMenu
       isPortalCollaborator={props.isPortalCollaborator}
       onTitleInputChange={props.onTitleInputChange}
+      onBackButtonClicked={props.onBackButtonClicked}
+      draftName={props.draftName}
     >
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />

@@ -432,6 +432,8 @@ export type AppProps = Merge<
       }
     >;
     detectScroll: boolean;
+    draftName: string;
+    onBackButtonClicked: () => void;
     handleKeyboardGlobally: boolean;
     isCollaborating: boolean;
     children?: React.ReactNode;

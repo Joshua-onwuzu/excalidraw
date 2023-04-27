@@ -245,11 +245,14 @@ const ExcalidrawWrapper = ({
   isPortalCollaborator,
   handlePublish,
   onTitleInputChange,
-
+  onBackButtonClicked,
+  draftName,
 }: {
   isPortalCollaborator?: boolean;
   handlePublish?: (excalidrawAPI: ExcalidrawImperativeAPI | null) => void;
   onTitleInputChange?: (e: any) => void;
+  onBackButtonClicked?: () => void;
+  draftName?: string;
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [langCode, setLangCode] = useAtom(appLangCodeAtom);
@@ -750,8 +753,10 @@ const ExcalidrawWrapper = ({
           isCollaborating={isCollaborating}
           onTitleInputChange={onTitleInputChange}
           isPortalCollaborator={isPortalCollaborator}
+          onBackButtonClicked={onBackButtonClicked}
+          draftName={draftName}
         />
-        <AppWelcomeScreen setCollabDialogShown={setCollabDialogShown} />
+        {/* <AppWelcomeScreen setCollabDialogShown={setCollabDialogShown} /> */}
         <AppFooter />
         {isCollaborating && isOffline && (
           <div className="collab-offline-warning">
@@ -773,10 +778,14 @@ const ExcalidrawApp = ({
   isCollaborator,
   handlePublish,
   onTitleInputChange,
+  onBackButtonClicked,
+  draftName,
 }: {
   isCollaborator?: boolean;
   handlePublish?: (excalidrawAPI: ExcalidrawImperativeAPI | null) => void;
   onTitleInputChange?: (e: any) => void;
+  onBackButtonClicked?: () => void;
+  draftName?: string;
 }) => {
   return (
     <TopErrorBoundary>
@@ -784,7 +793,9 @@ const ExcalidrawApp = ({
         <ExcalidrawWrapper
           handlePublish={handlePublish}
           isPortalCollaborator={isCollaborator}
-  onTitleInputChange={onTitleInputChange}
+          onTitleInputChange={onTitleInputChange}
+          onBackButtonClicked={onBackButtonClicked}
+          draftName={draftName}
         />
       </Provider>
     </TopErrorBoundary>

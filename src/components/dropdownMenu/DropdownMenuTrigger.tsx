@@ -1,21 +1,25 @@
 import clsx from "clsx";
+import { useState } from "react";
 import { useDevice, useExcalidrawAppState } from "../App";
 
 const MenuTrigger = ({
   className = "",
   children,
-  onToggle,
+  onBackButtonClicked,
   isPortalCollaborator,
   onTitleInputChange,
+  draftName,
 }: {
   className?: string;
   children: React.ReactNode;
-  onToggle: () => void;
+  onBackButtonClicked?: () => void;
   isPortalCollaborator: boolean;
   onTitleInputChange?: (e: any) => void;
+  draftName?: string;
 }) => {
   const appState = useExcalidrawAppState();
   const device = useDevice();
+  const [title, setTitle] = useState("");
   const classNames = clsx(
     `dropdown-menu-button ${className}`,
     "zen-mode-transition",
@@ -29,7 +33,7 @@ const MenuTrigger = ({
       <button
         data-prevent-outside-click
         className={classNames}
-        onClick={onToggle}
+        onClick={onBackButtonClicked}
         type="button"
         data-testid="dropdown-menu-button"
       >
@@ -37,7 +41,11 @@ const MenuTrigger = ({
       </button>
       {isPortalCollaborator && (
         <input
-          onChange={onTitleInputChange}
+          value={draftName || title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            !!onTitleInputChange && onTitleInputChange(e);
+          }}
           placeholder="Enter title ...."
           className="custom-input"
         />

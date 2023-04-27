@@ -521,7 +521,10 @@ export const handleChangesFromWhiteboard = async (
   // const isContentEqualsPrevContent =
   //   JSON.stringify(content) === JSON.stringify(previousWhiteboardContent);
   if (content.elements.length > 0) {
-    console.log("changes done........");
+    console.log(
+      "change is about to be saved with session id ==> ........",
+      sessionId,
+    );
     const data = {
       content,
       sessionId,
@@ -547,6 +550,7 @@ export const handleUpdatesFromBoardNode = (
    */
   draftContentNode.on(async (data: string) => {
     const decryptedData = await Sea.decrypt(data, rtcKey as ISEAPair);
+    console.log(decryptedData.by, "agsinbr", sessionId)
 
     if (
       decryptedData.by !== sessionId &&

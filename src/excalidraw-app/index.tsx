@@ -491,7 +491,7 @@ const ExcalidrawWrapper = ({
 
     setTheme(appState.theme);
 
-    console.log("hitting on change");
+    console.log("hitting on change with sessionId", sessionId);
 
     await handleChangesFromWhiteboard(
       whiteboardNode,

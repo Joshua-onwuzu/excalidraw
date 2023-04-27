@@ -749,6 +749,7 @@ const ExcalidrawWrapper = ({
           setCollabDialogShown={setCollabDialogShown}
           isCollaborating={isCollaborating}
           onTitleInputChange={onTitleInputChange}
+          isPortalCollaborator={isPortalCollaborator}
         />
         <AppWelcomeScreen setCollabDialogShown={setCollabDialogShown} />
         <AppFooter />

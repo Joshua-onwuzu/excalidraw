@@ -429,6 +429,7 @@ const ExcalidrawWrapper = ({
       }
     };
     const currentSceneElements = excalidrawAPI?.getSceneElements();
+    console.log(excalidrawAPI?.getAppState(), "Appstate");
     const callback = ({
       elements,
       appState,

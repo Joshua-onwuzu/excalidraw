@@ -71,13 +71,21 @@ interface LayerUIProps {
   onImageAction: (data: { insertOnCanvasDirectly: boolean }) => void;
   renderWelcomeScreen: boolean;
   children?: React.ReactNode;
+  isPortalCollaborator: boolean;
+  onTitleInputChange: (e: any) => void;
 }
 
 const DefaultMainMenu: React.FC<{
   UIOptions: AppProps["UIOptions"];
-}> = ({ UIOptions }) => {
+  isPortalCollaborator: boolean;
+  onTitleInputChange: (e: any) => void;
+}> = ({ UIOptions, isPortalCollaborator, onTitleInputChange }) => {
   return (
-    <MainMenu __fallback>
+    <MainMenu
+      onTitleInputChange={onTitleInputChange}
+      isPortalCollaborator={isPortalCollaborator}
+      __fallback
+    >
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />
       {/* FIXME we should to test for this inside the item itself */}
@@ -122,6 +130,8 @@ const LayerUI = ({
   onImageAction,
   renderWelcomeScreen,
   children,
+  isPortalCollaborator,
+  onTitleInputChange,
 }: LayerUIProps) => {
   const device = useDevice();
   const tunnels = useInitializeTunnels();
@@ -344,6 +354,8 @@ const LayerUI = ({
         focusContainer={focusContainer}
         library={library}
         id={id}
+        isPortalCollaborator={isPortalCollaborator}
+        onTitleInputChange={onTitleInputChange}
       />
     ) : null;
   };
@@ -361,7 +373,11 @@ const LayerUI = ({
       {/* render component fallbacks. Can be rendered anywhere as they'll be
           tunneled away. We only render tunneled components that actually
           have defaults when host do not render anything. */}
-      <DefaultMainMenu UIOptions={UIOptions} />
+      <DefaultMainMenu
+        isPortalCollaborator={isPortalCollaborator}
+        UIOptions={UIOptions}
+        onTitleInputChange={onTitleInputChange}
+      />
       {/* ------------------------------------------------------------------ */}
 
       {appState.isLoading && <LoadingMessage delay={250} />}

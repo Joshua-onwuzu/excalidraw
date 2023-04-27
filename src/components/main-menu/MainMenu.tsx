@@ -21,12 +21,16 @@ const MainMenu = Object.assign(
     ({
       children,
       onSelect,
+      isPortalCollaborator,
+      onTitleInputChange,
     }: {
       children?: React.ReactNode;
       /**
        * Called when any menu item is selected (clicked on).
        */
       onSelect?: (event: Event) => void;
+      isPortalCollaborator?: boolean;
+      onTitleInputChange?: (e: any) => void;
     }) => {
       const { mainMenuTunnel } = useTunnels();
       const device = useDevice();
@@ -45,6 +49,8 @@ const MainMenu = Object.assign(
                   openMenu: appState.openMenu === "canvas" ? null : "canvas",
                 });
               }}
+              isPortalCollaborator={isPortalCollaborator || false}
+              onTitleInputChange={onTitleInputChange}
             >
               {HamburgerMenuIcon}
             </DropdownMenu.Trigger>

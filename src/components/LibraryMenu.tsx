@@ -175,6 +175,8 @@ export const LibraryMenu: React.FC<{
   focusContainer: () => void;
   library: Library;
   id: string;
+  isPortalCollaborator: boolean;
+  onTitleInputChange: (e: any) => void;
 }> = ({
   appState,
   onInsertElements,
@@ -182,6 +184,8 @@ export const LibraryMenu: React.FC<{
   focusContainer,
   library,
   id,
+  isPortalCollaborator,
+  onTitleInputChange,
 }) => {
   const setAppState = useExcalidrawSetAppState();
   const elements = useExcalidrawElements();
@@ -288,6 +292,8 @@ export const LibraryMenu: React.FC<{
             removeFromLibrary(libraryItemsData.libraryItems)
           }
           resetLibrary={resetLibrary}
+          isPortalCollaborator={isPortalCollaborator}
+          onTitleInputChange={onTitleInputChange}
         />
       </Sidebar.Header>
       <LibraryMenuContent

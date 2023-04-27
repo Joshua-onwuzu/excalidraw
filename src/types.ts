@@ -369,6 +369,7 @@ export interface ExcalidrawProps {
    */
   renderSidebar?: () => JSX.Element | null;
   children?: React.ReactNode;
+  isPortalCollaborator?: boolean;
 }
 
 export type SceneData = {
@@ -434,6 +435,8 @@ export type AppProps = Merge<
     handleKeyboardGlobally: boolean;
     isCollaborating: boolean;
     children?: React.ReactNode;
+    isPortalCollaborator: boolean;
+    onTitleInputChange: (e: any) => void;
   }
 >;
 

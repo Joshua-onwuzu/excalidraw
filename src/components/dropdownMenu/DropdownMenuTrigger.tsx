@@ -5,10 +5,14 @@ const MenuTrigger = ({
   className = "",
   children,
   onToggle,
+  isPortalCollaborator,
+  onTitleInputChange,
 }: {
   className?: string;
   children: React.ReactNode;
   onToggle: () => void;
+  isPortalCollaborator: boolean;
+  onTitleInputChange?: (e: any) => void;
 }) => {
   const appState = useExcalidrawAppState();
   const device = useDevice();
@@ -21,15 +25,24 @@ const MenuTrigger = ({
     },
   ).trim();
   return (
-    <button
-      data-prevent-outside-click
-      className={classNames}
-      onClick={onToggle}
-      type="button"
-      data-testid="dropdown-menu-button"
-    >
-      {children}
-    </button>
+    <div className="custom-tool">
+      <button
+        data-prevent-outside-click
+        className={classNames}
+        onClick={onToggle}
+        type="button"
+        data-testid="dropdown-menu-button"
+      >
+        {children}
+      </button>
+      {isPortalCollaborator && (
+        <input
+          onChange={onTitleInputChange}
+          placeholder="Enter title ...."
+          className="custom-input"
+        />
+      )}
+    </div>
   );
 };
 

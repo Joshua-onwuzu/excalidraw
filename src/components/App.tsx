@@ -561,7 +561,12 @@ class App extends React.Component<AppProps, AppState> {
       this.scene.getNonDeletedElements(),
       this.state,
     );
-    const { renderTopRightUI, renderCustomStats } = this.props;
+    const {
+      renderTopRightUI,
+      renderCustomStats,
+      isPortalCollaborator,
+      onTitleInputChange,
+    } = this.props;
 
     return (
       <div
@@ -613,6 +618,8 @@ class App extends React.Component<AppProps, AppState> {
                         typeof this.props?.zenModeEnabled === "undefined" &&
                         this.state.zenModeEnabled
                       }
+                      isPortalCollaborator={isPortalCollaborator}
+                      onTitleInputChange={onTitleInputChange}
                       libraryReturnUrl={this.props.libraryReturnUrl}
                       UIOptions={this.props.UIOptions}
                       focusContainer={this.focusContainer}

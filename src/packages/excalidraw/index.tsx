@@ -45,6 +45,7 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
     onPointerDown,
     onScrollChange,
     children,
+    isPortalCollaborator,
   } = props;
 
   const canvasActions = props.UIOptions?.canvasActions;
@@ -117,6 +118,7 @@ const ExcalidrawBase = (props: ExcalidrawProps) => {
           onPointerDown={onPointerDown}
           onScrollChange={onScrollChange}
           renderSidebar={renderSidebar}
+          isPortalCollaborator={isPortalCollaborator || false}
         >
           {children}
         </App>

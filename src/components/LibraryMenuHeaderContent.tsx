@@ -36,6 +36,8 @@ export const LibraryMenuHeader: React.FC<{
   resetLibrary: () => void;
   onSelectItems: (items: LibraryItem["id"][]) => void;
   appState: AppState;
+  isPortalCollaborator: boolean;
+  onTitleInputChange: (e: any) => void;
 }> = ({
   setAppState,
   selectedItems,
@@ -44,6 +46,8 @@ export const LibraryMenuHeader: React.FC<{
   resetLibrary,
   onSelectItems,
   appState,
+  isPortalCollaborator,
+  onTitleInputChange,
 }) => {
   const [libraryItemsData] = useAtom(libraryItemsAtom, jotaiScope);
   const [isLibraryMenuOpen, setIsLibraryMenuOpen] = useAtom(
@@ -183,6 +187,8 @@ export const LibraryMenuHeader: React.FC<{
         <DropdownMenu.Trigger
           className="Sidebar__dropdown-btn"
           onToggle={() => setIsLibraryMenuOpen(!isLibraryMenuOpen)}
+          isPortalCollaborator={isPortalCollaborator}
+          onTitleInputChange={onTitleInputChange}
         >
           {DotsIcon}
         </DropdownMenu.Trigger>

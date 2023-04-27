@@ -553,7 +553,8 @@ export const handleUpdatesFromBoardNode = (
     if (
       decryptedData.by !== sessionId &&
       JSON.stringify(currentSceneElements) !==
-        JSON.stringify(decryptedData.content.elements)
+        JSON.stringify(decryptedData.content.elements) &&
+      currentSceneElements.length > 0
     ) {
       console.log("hitting merch");
       const { elements, appState } = decryptedData.content;

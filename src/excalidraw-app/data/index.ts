@@ -550,6 +550,12 @@ export const handleUpdatesFromBoardNode = (
 
     console.log("hitting up");
 
+    console.log(
+      currentSceneElements.length > 0,
+      currentSceneElements,
+      "current elements",
+    );
+
     if (
       decryptedData.by !== sessionId &&
       JSON.stringify(currentSceneElements) !==

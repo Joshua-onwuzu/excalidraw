@@ -553,8 +553,7 @@ export const handleUpdatesFromBoardNode = (
     console.log(decryptedData.by, "agsinbr", sessionId);
 
     if (
-      decryptedData.by &&
-      decryptedData.by !== sessionId &&
+      decryptedData.sessionId !== sessionId &&
       JSON.stringify(currentSceneElements) !==
         JSON.stringify(decryptedData.content.elements)
     ) {

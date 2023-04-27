@@ -548,21 +548,11 @@ export const handleUpdatesFromBoardNode = (
   draftContentNode.on(async (data: string) => {
     const decryptedData = await Sea.decrypt(data, rtcKey as ISEAPair);
 
-    console.log("hitting up");
-
-    console.log(
-      currentSceneElements.length > 0,
-      currentSceneElements,
-      "current elements",
-    );
-
     if (
       decryptedData.by !== sessionId &&
       JSON.stringify(currentSceneElements) !==
-        JSON.stringify(decryptedData.content.elements) &&
-      currentSceneElements.length > 0
+        JSON.stringify(decryptedData.content.elements)
     ) {
-      console.log("hitting merch");
       const { elements, appState } = decryptedData.content;
       callback({
         elements,

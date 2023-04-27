@@ -244,9 +244,12 @@ export const appLangCodeAtom = atom(
 const ExcalidrawWrapper = ({
   isPortalCollaborator,
   handlePublish,
+  onTitleInputChange,
+
 }: {
   isPortalCollaborator?: boolean;
   handlePublish?: (excalidrawAPI: ExcalidrawImperativeAPI | null) => void;
+  onTitleInputChange?: (e: any) => void;
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [langCode, setLangCode] = useAtom(appLangCodeAtom);
@@ -745,6 +748,7 @@ const ExcalidrawWrapper = ({
         <AppMainMenu
           setCollabDialogShown={setCollabDialogShown}
           isCollaborating={isCollaborating}
+          onTitleInputChange={onTitleInputChange}
         />
         <AppWelcomeScreen setCollabDialogShown={setCollabDialogShown} />
         <AppFooter />
@@ -767,9 +771,11 @@ const ExcalidrawWrapper = ({
 const ExcalidrawApp = ({
   isCollaborator,
   handlePublish,
+  onTitleInputChange,
 }: {
   isCollaborator?: boolean;
   handlePublish?: (excalidrawAPI: ExcalidrawImperativeAPI | null) => void;
+  onTitleInputChange?: (e: any) => void;
 }) => {
   return (
     <TopErrorBoundary>
@@ -777,6 +783,7 @@ const ExcalidrawApp = ({
         <ExcalidrawWrapper
           handlePublish={handlePublish}
           isPortalCollaborator={isCollaborator}
+  onTitleInputChange={onTitleInputChange}
         />
       </Provider>
     </TopErrorBoundary>

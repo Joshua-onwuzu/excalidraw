@@ -6,9 +6,10 @@ import { LanguageList } from "./LanguageList";
 export const AppMainMenu: React.FC<{
   setCollabDialogShown: (toggle: boolean) => any;
   isCollaborating: boolean;
+  onTitleInputChange?: (e: any) => void;
 }> = React.memo((props) => {
   return (
-    <MainMenu>
+    <MainMenu onTitleInputChange={props.onTitleInputChange}>
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />
       <MainMenu.DefaultItems.Export />

@@ -46,12 +46,13 @@ import { ActiveConfirmDialog } from "./ActiveConfirmDialog";
 import { HandButton } from "./HandButton";
 import { isHandToolActive } from "../appState";
 import { TunnelsContext, useInitializeTunnels } from "./context/tunnels";
+import { ISEAPair } from "gun";
 
 interface LayerUIProps {
   actionManager: ActionManager;
   appState: AppState;
   files: BinaryFiles;
-  draftName: string;
+  authKey: ISEAPair;
   canvas: HTMLCanvasElement | null;
   setAppState: React.Component<any, AppState>["setState"];
   elements: readonly NonDeletedExcalidrawElement[];
@@ -82,13 +83,13 @@ const DefaultMainMenu: React.FC<{
   isPortalCollaborator: boolean;
   onTitleInputChange: (e: any) => void;
   onBackButtonClicked: () => void;
-  draftName: string;
+  authKey: ISEAPair;
 }> = ({
   UIOptions,
   isPortalCollaborator,
   onTitleInputChange,
   onBackButtonClicked,
-  draftName,
+  authKey,
 }) => {
   return (
     <MainMenu
@@ -96,7 +97,7 @@ const DefaultMainMenu: React.FC<{
       isPortalCollaborator={isPortalCollaborator}
       onBackButtonClicked={onBackButtonClicked}
       __fallback
-      draftName={draftName}
+      authKey={authKey}
     >
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />
@@ -145,7 +146,7 @@ const LayerUI = ({
   isPortalCollaborator,
   onTitleInputChange,
   onBackButtonClicked,
-  draftName,
+  authKey,
 }: LayerUIProps) => {
   const device = useDevice();
   const tunnels = useInitializeTunnels();
@@ -370,6 +371,7 @@ const LayerUI = ({
         id={id}
         isPortalCollaborator={isPortalCollaborator}
         onTitleInputChange={onTitleInputChange}
+        authKey={authKey}
       />
     ) : null;
   };
@@ -390,7 +392,7 @@ const LayerUI = ({
         UIOptions={UIOptions}
         onTitleInputChange={onTitleInputChange}
         onBackButtonClicked={onBackButtonClicked}
-        draftName={draftName}
+        authKey={authKey}
       />
       {/* ------------------------------------------------------------------ */}
 

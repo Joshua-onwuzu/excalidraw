@@ -567,7 +567,7 @@ class App extends React.Component<AppProps, AppState> {
       isPortalCollaborator,
       onTitleInputChange,
       onBackButtonClicked,
-      draftName,
+      authKey,
     } = this.props;
 
     return (
@@ -599,9 +599,9 @@ class App extends React.Component<AppProps, AppState> {
                       canvas={this.canvas}
                       appState={this.state}
                       files={this.files}
-                      draftName={draftName}
                       setAppState={this.setAppState}
                       actionManager={this.actionManager}
+                      authKey={authKey}
                       elements={this.scene.getNonDeletedElements()}
                       onLockToggle={this.toggleLock}
                       onPenModeToggle={this.togglePenMode}

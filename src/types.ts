@@ -33,6 +33,7 @@ import type { ALLOWED_IMAGE_MIME_TYPES, MIME_TYPES } from "./constants";
 import { ContextMenuItems } from "./components/ContextMenu";
 import { Merge, ForwardRef } from "./utility-types";
 import React from "react";
+import { ISEAPair } from "gun";
 
 export type Point = Readonly<RoughPoint>;
 
@@ -306,7 +307,6 @@ export interface IDraftMetadata {
   name: string;
   portalLock: string;
   ownerLock: string;
-  portalRoomLock: string;
   owner: string;
   type: FileSource;
 }
@@ -439,6 +439,7 @@ export type AppProps = Merge<
     children?: React.ReactNode;
     isPortalCollaborator: boolean;
     onTitleInputChange: (e: any) => void;
+    authKey: ISEAPair;
   }
 >;
 

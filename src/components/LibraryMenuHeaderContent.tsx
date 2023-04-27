@@ -20,6 +20,7 @@ import PublishLibrary from "./PublishLibrary";
 import { Dialog } from "./Dialog";
 
 import DropdownMenu from "./dropdownMenu/DropdownMenu";
+import { ISEAPair } from "gun";
 
 export const isLibraryMenuOpenAtom = atom(false);
 
@@ -38,6 +39,7 @@ export const LibraryMenuHeader: React.FC<{
   appState: AppState;
   isPortalCollaborator: boolean;
   onTitleInputChange: (e: any) => void;
+  authKey: ISEAPair;
 }> = ({
   setAppState,
   selectedItems,
@@ -48,6 +50,7 @@ export const LibraryMenuHeader: React.FC<{
   appState,
   isPortalCollaborator,
   onTitleInputChange,
+  authKey,
 }) => {
   const [libraryItemsData] = useAtom(libraryItemsAtom, jotaiScope);
   const [isLibraryMenuOpen, setIsLibraryMenuOpen] = useAtom(
@@ -181,13 +184,14 @@ export const LibraryMenuHeader: React.FC<{
       });
   };
 
-  const renderLibraryMenu = () => {
+  const renderLibraryMenu = (authKey: ISEAPair) => {
     return (
       <DropdownMenu open={isLibraryMenuOpen}>
         <DropdownMenu.Trigger
           className="Sidebar__dropdown-btn"
           isPortalCollaborator={isPortalCollaborator}
           onTitleInputChange={onTitleInputChange}
+          authKey={authKey}
         >
           {DotsIcon}
         </DropdownMenu.Trigger>
@@ -237,7 +241,7 @@ export const LibraryMenuHeader: React.FC<{
   };
   return (
     <div style={{ position: "relative" }}>
-      {renderLibraryMenu()}
+      {renderLibraryMenu(authKey)}
       {selectedItems.length > 0 && (
         <div className="library-actions-counter">{selectedItems.length}</div>
       )}

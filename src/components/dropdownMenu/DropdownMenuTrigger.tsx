@@ -1,6 +1,13 @@
 import clsx from "clsx";
-import { useState } from "react";
+import { ISEAPair } from "gun";
+import { useAtom } from "jotai";
+import { useEffect, useState } from "react";
+import { collabAPIAtom } from "../../excalidraw-app/collab/Collab";
+import { getRoomInfoFromLink, instantiateGun } from "../../excalidraw-app/data";
+import { IDraftMetadata } from "../../types";
 import { useDevice, useExcalidrawAppState } from "../App";
+
+const idTracker: any[] = [];
 
 const MenuTrigger = ({
   className = "",
@@ -8,18 +15,19 @@ const MenuTrigger = ({
   onBackButtonClicked,
   isPortalCollaborator,
   onTitleInputChange,
-  draftName,
+  authKey,
 }: {
   className?: string;
   children: React.ReactNode;
   onBackButtonClicked?: () => void;
   isPortalCollaborator: boolean;
   onTitleInputChange?: (e: any) => void;
-  draftName?: string;
+  authKey?: ISEAPair;
 }) => {
   const appState = useExcalidrawAppState();
   const device = useDevice();
   const [title, setTitle] = useState("");
+  const [collabAPI] = useAtom(collabAPIAtom);
   const classNames = clsx(
     `dropdown-menu-button ${className}`,
     "zen-mode-transition",
@@ -28,12 +36,36 @@ const MenuTrigger = ({
       "dropdown-menu-button--mobile": device.isMobile,
     },
   ).trim();
+  useEffect(() => {
+    if (authKey && isPortalCollaborator) {
+      const { contractAddress, roomId } = getRoomInfoFromLink(
+        window.location.href,
+      );
+      const gun = instantiateGun();
+      const portalDraftMetaDataNode = gun
+        .user()
+        .auth(authKey as ISEAPair)
+        .get(`${contractAddress}/rtc`)
+        .get(roomId);
+      portalDraftMetaDataNode.on((data: IDraftMetadata, id: any) => {
+        if (!idTracker.includes(id)) {
+          idTracker.push(id);
+          setTitle(data.name);
+          portalDraftMetaDataNode.off();
+        }
+      });
+    }
+  }, []);
+
   return (
     <div className="custom-tool">
       <button
         data-prevent-outside-click
         className={classNames}
-        onClick={onBackButtonClicked}
+        onClick={(e) => {
+          collabAPI?.stopCollaboration();
+          onBackButtonClicked && onBackButtonClicked();
+        }}
         type="button"
         data-testid="dropdown-menu-button"
       >
@@ -41,7 +73,7 @@ const MenuTrigger = ({
       </button>
       {isPortalCollaborator && (
         <input
-          value={draftName || title}
+          value={title}
           onChange={(e) => {
             setTitle(e.target.value);
             !!onTitleInputChange && onTitleInputChange(e);

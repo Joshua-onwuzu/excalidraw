@@ -1,3 +1,4 @@
+import { ISEAPair } from "gun";
 import React from "react";
 import { PlusPromoIcon } from "../../components/icons";
 import { MainMenu } from "../../packages/excalidraw/index";
@@ -9,14 +10,14 @@ export const AppMainMenu: React.FC<{
   onTitleInputChange?: (e: any) => void;
   isPortalCollaborator?: boolean;
   onBackButtonClicked?: () => void;
-  draftName?: string;
+  authKey?: ISEAPair;
 }> = React.memo((props) => {
   return (
     <MainMenu
       isPortalCollaborator={props.isPortalCollaborator}
       onTitleInputChange={props.onTitleInputChange}
       onBackButtonClicked={props.onBackButtonClicked}
-      draftName={props.draftName}
+      authKey={props.authKey}
     >
       <MainMenu.DefaultItems.LoadScene />
       <MainMenu.DefaultItems.SaveToActiveFile />

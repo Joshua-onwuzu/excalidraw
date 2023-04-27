@@ -13,6 +13,7 @@ import { t } from "../../i18n";
 import { withInternalFallback } from "../hoc/withInternalFallback";
 import { composeEventHandlers } from "../../utils";
 import { useTunnels } from "../context/tunnels";
+import { ISEAPair } from "gun";
 
 const MainMenu = Object.assign(
   withInternalFallback(
@@ -23,7 +24,7 @@ const MainMenu = Object.assign(
       isPortalCollaborator,
       onTitleInputChange,
       onBackButtonClicked,
-      draftName,
+      authKey,
     }: {
       children?: React.ReactNode;
       /**
@@ -33,7 +34,7 @@ const MainMenu = Object.assign(
       isPortalCollaborator?: boolean;
       onTitleInputChange?: (e: any) => void;
       onBackButtonClicked?: () => void;
-      draftName?: string;
+      authKey?: ISEAPair;
     }) => {
       const { mainMenuTunnel } = useTunnels();
       const device = useDevice();
@@ -50,7 +51,7 @@ const MainMenu = Object.assign(
               onBackButtonClicked={onBackButtonClicked}
               isPortalCollaborator={isPortalCollaborator || false}
               onTitleInputChange={onTitleInputChange}
-              draftName={draftName}
+              authKey={authKey}
             >
               <svg
                 width="18"

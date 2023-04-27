@@ -32,6 +32,7 @@ import { getSelectedElements } from "../scene";
 import { NonDeletedExcalidrawElement } from "../element/types";
 import { LibraryMenuHeader } from "./LibraryMenuHeaderContent";
 import LibraryMenuBrowseButton from "./LibraryMenuBrowseButton";
+import { ISEAPair } from "gun";
 
 const useOnClickOutside = (
   ref: RefObject<HTMLElement>,
@@ -177,6 +178,7 @@ export const LibraryMenu: React.FC<{
   id: string;
   isPortalCollaborator: boolean;
   onTitleInputChange: (e: any) => void;
+  authKey: ISEAPair;
 }> = ({
   appState,
   onInsertElements,
@@ -186,6 +188,7 @@ export const LibraryMenu: React.FC<{
   id,
   isPortalCollaborator,
   onTitleInputChange,
+  authKey,
 }) => {
   const setAppState = useExcalidrawSetAppState();
   const elements = useExcalidrawElements();
@@ -294,6 +297,7 @@ export const LibraryMenu: React.FC<{
           resetLibrary={resetLibrary}
           isPortalCollaborator={isPortalCollaborator}
           onTitleInputChange={onTitleInputChange}
+          authKey={authKey}
         />
       </Sidebar.Header>
       <LibraryMenuContent

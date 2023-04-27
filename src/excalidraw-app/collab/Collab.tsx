@@ -282,12 +282,6 @@ class Collab extends PureComponent<Props, CollabState> {
     this.queueSaveToFirebase.cancel();
     this.loadImageFiles.cancel();
 
-    // this.saveCollabRoomToFirebase(
-    //   getSyncableElements(
-    //     this.excalidrawAPI.getSceneElementsIncludingDeleted(),
-    //   ),
-    // );
-
     if (this.portal.socket && this.fallbackInitializationHandler) {
       this.portal.socket.off(
         "connect_error",
@@ -298,40 +292,40 @@ class Collab extends PureComponent<Props, CollabState> {
     if (!keepRemoteState) {
       LocalData.fileStorage.reset();
       this.destroySocketClient();
-    } else if (window.confirm(t("alerts.collabStopOverridePrompt"))) {
-      // hack to ensure that we prefer we disregard any new browser state
-      // that could have been saved in other tabs while we were collaborating
-      resetBrowserStateVersions();
-
-      const link = window.location.href;
-      const formatedLink = getLinkFormatedUrl(link);
-      const url = new URL(formatedLink);
-      const urlSearchParams = url.searchParams;
-      urlSearchParams.delete("collab");
-      urlSearchParams.delete("roomKey");
-      window.history.pushState(
-        {},
-        APP_NAME,
-        `${url.origin}/#${url.pathname}${url.search}`,
-      );
-      this.destroySocketClient();
-
-      LocalData.fileStorage.reset();
-
-      const elements = this.excalidrawAPI
-        .getSceneElementsIncludingDeleted()
-        .map((element) => {
-          if (isImageElement(element) && element.status === "saved") {
-            return newElementWith(element, { status: "pending" });
-          }
-          return element;
-        });
-
-      this.excalidrawAPI.updateScene({
-        elements,
-        commitToHistory: false,
-      });
     }
+
+    // hack to ensure that we prefer we disregard any new browser state
+    // that could have been saved in other tabs while we were collaborating
+    resetBrowserStateVersions();
+
+    const link = window.location.href;
+    const formatedLink = getLinkFormatedUrl(link);
+    const url = new URL(formatedLink);
+    const urlSearchParams = url.searchParams;
+    urlSearchParams.delete("collab");
+    urlSearchParams.delete("roomKey");
+    window.history.pushState(
+      {},
+      APP_NAME,
+      `${url.origin}/#${url.pathname}${url.search}`,
+    );
+    this.destroySocketClient();
+
+    LocalData.fileStorage.reset();
+
+    const elements = this.excalidrawAPI
+      .getSceneElementsIncludingDeleted()
+      .map((element) => {
+        if (isImageElement(element) && element.status === "saved") {
+          return newElementWith(element, { status: "pending" });
+        }
+        return element;
+      });
+
+    this.excalidrawAPI.updateScene({
+      elements,
+      commitToHistory: false,
+    });
   };
 
   private destroySocketClient = (opts?: { isUnload: boolean }) => {

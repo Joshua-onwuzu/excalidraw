@@ -37,7 +37,8 @@ DropdownMenu.ItemLink = DropdownMenuItemLink;
 DropdownMenu.ItemCustom = DropdownMenuItemCustom;
 DropdownMenu.Group = DropdownMenuGroup;
 DropdownMenu.Separator = MenuSeparator;
+DropdownMenu.displayName = "DropdownMenu";
 
 export default DropdownMenu;
 
-DropdownMenu.displayName = "DropdownMenu";
+

@@ -294,9 +294,7 @@ export const getRtcKeyFromUrl = () => {
 };
 export const getRoomKeyFromUrl = () => {
   const { rtcKey: base64RtcKey } = getRoomInfoFromLink(window.location.href);
-  console.log(base64RtcKey, "base64 rtc key");
   const roomKeyMaterial = resolveCollabRoomKey(base64RtcKey as string);
-  console.log(roomKeyMaterial, "roooooom material");
   return roomKeyMaterial.roomKey;
 };
 
@@ -513,18 +511,11 @@ export const handleChangesFromWhiteboard = async (
   rtcKey: ISEAPair,
   sessionId: string,
 ) => {
-  console.log("changes, geeeeeeeeee");
   /**
    * Only save changes from whiteboard when whiteboard is not empty
    * and when previously saved whiteboard content is not the same as the new content
    */
-  // const isContentEqualsPrevContent =
-  //   JSON.stringify(content) === JSON.stringify(previousWhiteboardContent);
   if (content.elements.length > 0) {
-    console.log(
-      "change is about to be saved with session id ==> ........",
-      sessionId,
-    );
     const data = {
       content,
       sessionId,
@@ -546,11 +537,11 @@ export const handleUpdatesFromBoardNode = (
 ) => {
   /**
    * This listens for changes made on the content node
-   * callback function is being called only when incoming_state was not written by the current user && user current state is not the same as the incoming_data
+   * callback function is being called only when incoming_state was not written by the current user 
+   * && user current state is not the same as the incoming_data
    */
   draftContentNode.on(async (data: string) => {
     const decryptedData = await Sea.decrypt(data, rtcKey as ISEAPair);
-    console.log(decryptedData.by, "agsinbr", sessionId);
 
     if (
       decryptedData.sessionId !== sessionId &&

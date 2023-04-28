@@ -39,14 +39,10 @@ let firebaseStoragePromise: Promise<any> | null | true = null;
 let isFirebaseInitialized = false;
 
 const _loadFirebase = async () => {
-  console.log("coooll");
   const firebase = fb;
-  console.log("yetttt");
   if (!isFirebaseInitialized) {
     try {
-      console.log("brim");
       firebase.initializeApp(FIREBASE_CONFIG);
-      console.log("kobbbbbba");
     } catch (error: any) {
       // trying initialize again throws. Usually this is harmless, and happens
       // mainly in dev (HMR)
@@ -75,12 +71,10 @@ const _getFirebase = async (): Promise<
 
 const loadFirestore = async () => {
   const firebase = await _getFirebase();
-  console.log("pop");
   if (firestorePromise !== true) {
     await firestorePromise;
     firestorePromise = true;
   }
-  console.log("done")
   return firebase;
 };
 
@@ -218,13 +212,10 @@ export const saveToFirebase = async (
   ) {
     return false;
   }
-  console.log("step 1");
   const firebase = await loadFirestore();
   const firestore = firebase.firestore();
-  console.log("step 2");
 
   const docRef = firestore.collection("scenes").doc(roomId);
-  console.log("step 3");
   const savedData = await firestore.runTransaction(async (transaction) => {
     const snapshot = await transaction.get(docRef);
 

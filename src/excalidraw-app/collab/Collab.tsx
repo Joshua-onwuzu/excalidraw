@@ -247,36 +247,6 @@ class Collab extends PureComponent<Props, CollabState> {
     }
   });
 
-  // saveCollabRoomToFirebase = async (
-  //   syncableElements: readonly SyncableExcalidrawElement[],
-  // ) => {
-  //   try {
-  //     console.log("hitting  saving firebase")
-  //     const savedData = await saveToFirebase(
-  //       this.portal,
-  //       syncableElements,
-  //       this.excalidrawAPI.getAppState(),
-  //     );
-  //     console.log("done hitting firebase")
-
-  //     if (this.isCollaborating() && savedData && savedData.reconciledElements) {
-  //       console.log("gummmyt")
-  //       this.handleRemoteSceneUpdate(
-  //         this.reconcileElements(savedData.reconciledElements),
-  //       );
-  //       console.log("kollllo")
-  //     }
-  //   } catch (error: any) {
-  //     this.setState({
-  //       // firestore doesn't return a specific error code when size exceeded
-  //       errorMessage: /is longer than.*?bytes/.test(error.message)
-  //         ? t("errors.collabSaveFailed_sizeExceeded")
-  //         : t("errors.collabSaveFailed"),
-  //     });
-  //     console.error(error);
-  //   }
-  // };
-
   stopCollaboration = (keepRemoteState = true) => {
     this.queueBroadcastAllElements.cancel();
     this.queueSaveToFirebase.cancel();
@@ -411,130 +381,22 @@ class Collab extends PureComponent<Props, CollabState> {
         `${window.location.href}&collab=true`,
       );
     }
-
-    // if (!existingRoomLinkData && authKey) {
-    //   console.log("there is authKey and no lInkdata", authKey);
-    //   const gun = instantiateGun();
-    //   const { contractAddress, roomId: rtcId } = getRoomInfoFromLink(
-    //     window.location.href,
-    //   );
-    //   const portalDraftMetaDataNode = gun
-    //     .user()
-    //     .auth(authKey)
-    //     .get(`${contractAddress}/rtc`)
-    //     .get(rtcId);
-
-    //   let draft: IDraftMetadata;
-
-    //   await portalDraftMetaDataNode.on((data: IDraftMetadata, id: any) => {
-    //     if (!this.idTracker.includes(id)) {
-    //       this.idTracker.push(id);
-    //       draft = data;
-    //       console.log(data, "data bitch");
-    //       console.log("this should run again log data", data);
-    //     }
-    //   });
-    //   console.log(draft!, "drafts");
-    //   if (draft!) {
-    //     if (draft.portalRoomLock) {
-    //       const key = await decryptPortalRoomLockUsingRSAKey(
-    //         draft.portalRoomLock,
-    //         portalDecryptionkey,
-    //       );
-    //       console.log(key, "dog ibile");
-    //       if (key) {
-    //         roomKey = JSON.parse(key);
-    //         ({ roomId } = getRoomInfoFromLink(window.location.href));
-    //         window.history.pushState(
-    //           {},
-    //           APP_NAME,
-    //           `${window.location.href}${getCollaborationLink({
-    //             roomId,
-    //             roomKey,
-    //           })}`,
-    //         );
-    //         console.log(
-    //           `${window.location.href}${getCollaborationLink({
-    //             roomId,
-    //             roomKey,
-    //           })}`,
-    //           "from collaboration",
-    //         );
-    //       }
-    //     } else {
-    //       ({ roomId, roomKey } = await generateCollaborationLinkData());
-    //       const { rtcId, name, portalLock, ownerLock, owner, type } = draft!;
-    //       console.log("hitting else and should update draft metadata", draft!);
-    //       const lock = await encryptPortalRoomLockUsingRSAKey(
-    //         roomKey,
-    //         portalEncryptionKey,
-    //       );
-    //       console.log(lock, "backwards should be the portal lock");
-    //       window.history.pushState(
-    //         {},
-    //         APP_NAME,
-    //         `${window.location.href}${getCollaborationLink({
-    //           roomId,
-    //           roomKey,
-    //         })}`,
-    //       );
-    //       console.log(
-    //         {
-    //           rtcId,
-    //           name,
-    //           portalLock,
-    //           owner,
-    //           ownerLock,
-    //           type,
-    //           portalRoomLock: lock,
-    //         },
-    //         "what that is to be saved",
-    //       );
-    //       await portalDraftMetaDataNode.get(rtcId).put({
-    //         rtcId,
-    //         name,
-    //         portalLock,
-    //         owner,
-    //         ownerLock,
-    //         type,
-    //         portalRoomLock: lock,
-    //       });
-
-    //       console.log("at this point it should generate a new key");
-    //     }
-    //   } else {
-    //     console.log("no draftss", draft!);
-    //   }
-    // } else if (existingRoomLinkData) {
-    //   ({ roomId, roomKey } = existingRoomLinkData);
-    // } else {
-    //   ({ roomId, roomKey } = await generateCollaborationLinkData());
-    //   window.history.pushState(
-    //     {},
-    //     APP_NAME,
-    //     `${window.location.href}${getCollaborationLink({ roomId, roomKey })}`,
-    //   );
-    // }
     const scenePromise = resolvablePromise<ImportedDataState | null>();
 
     this.setIsCollaborating(true);
     LocalData.pauseSave("collaboration");
     const fallbackInitializationHandler = () => {
-      console.log("bastard, ibile");
       this.initializeRoom({
         roomLinkData: null,
         fetchScene: true,
       }).then((scene) => {
-        console.log("hitting after bastard ibile");
         scenePromise.resolve(scene);
-        console.log("cross out");
       });
     };
     this.fallbackInitializationHandler = fallbackInitializationHandler;
 
     try {
       const socketServerData = await getCollabServer();
-      console.log(roomKey, "before opening portal roomKety");
       this.portal.socket = this.portal.open(
         socketIOClient(socketServerData.url, {
           transports: socketServerData.polling
@@ -656,12 +518,6 @@ class Collab extends PureComponent<Props, CollabState> {
       if (this.portal.socket) {
         this.portal.socket.off("first-in-room");
       }
-      console.log("pami obele");
-      // const sceneData = await this.initializeRoom({
-      //   fetchScene: true,
-      //   roomLinkData: existingRoomLinkData,
-      // });
-      // scenePromise.resolve(sceneData);
     });
 
     this.initializeIdleDetector();

@@ -13,7 +13,6 @@ export const UserList: React.FC<{
   collaborators: AppState["collaborators"];
 }> = ({ className, mobile, collaborators }) => {
   const actionManager = useExcalidrawActionManager();
-  console.log(collaborators, "collaborator");
   const uniqueCollaborators = new Map<string, Collaborator>();
   collaborators.forEach((collaborator, socketId) => {
     uniqueCollaborators.set(
@@ -22,16 +21,6 @@ export const UserList: React.FC<{
       collaborator,
     );
   });
-  console.log(uniqueCollaborators, "brass");
-  const ox = Array.from(uniqueCollaborators).filter(([_, client]) => {
-    return Object.keys(client).length !== 0;
-  });
-  const bx = Array.from(uniqueCollaborators).filter(([_, client]) => {
-    return Object.keys(client).length !== 0 && typeof _ !== "undefined";
-  });
-  console.log("geeeeeez");
-  console.log(ox, "free of charge");
-  console.log(bx, "mine for rever");
   const avatars =
     uniqueCollaborators.size > 0 &&
     Array.from(uniqueCollaborators)
@@ -39,7 +28,6 @@ export const UserList: React.FC<{
         return Object.keys(client).length !== 0 && _;
       })
       .map(([clientId, collaborator]) => {
-        console.log(clientId, collaborator, "mustapha n", "brass");
         const avatarJSX = actionManager.renderAction("goToCollaborator", [
           clientId,
           collaborator,

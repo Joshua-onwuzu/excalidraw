@@ -40,5 +40,3 @@ DropdownMenu.Separator = MenuSeparator;
 DropdownMenu.displayName = "DropdownMenu";
 
 export default DropdownMenu;
-
-

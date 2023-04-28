@@ -478,7 +478,6 @@ export const getEligibleElementsForBinding = (
   elements: NonDeleted<ExcalidrawElement>[],
 ): SuggestedBinding[] => {
   const includedElementIds = new Set(elements.map(({ id }) => id));
-  console.log(elements, "bridge it");
   return elements.flatMap((element) =>
     isBindingElement(element, false)
       ? (getElligibleElementsForBindingElement(
@@ -529,11 +528,6 @@ const getLinearElementEdgeCoors = (
 const getElligibleElementsForBindableElementAndWhere = (
   bindableElement: NonDeleted<ExcalidrawBindableElement>,
 ): SuggestedPointBinding[] => {
-  console.log(bindableElement, "bindable element");
-  console.log(
-    "Scene.getScene(bindableElement)",
-    Scene.getScene(bindableElement),
-  );
   if (!Scene.getScene(bindableElement)) {
     return [];
   }

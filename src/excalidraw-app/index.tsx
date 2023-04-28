@@ -431,7 +431,6 @@ const ExcalidrawWrapper = ({
       }
     };
     const currentSceneElements = excalidrawAPI?.getSceneElements();
-    console.log(excalidrawAPI?.getAppState(), "Appstate");
     const callback = ({
       elements,
       appState,
@@ -439,15 +438,12 @@ const ExcalidrawWrapper = ({
       elements: readonly ExcalidrawElement[];
       appState: any;
     }) => {
-      console.log({ elements, appState }, "damn");
       excalidrawAPI?.updateScene({
         elements,
         appState,
       });
-      console.log("it should have updated scene ");
     };
     if (excalidrawAPI) {
-      console.log("saving to whiteboard with rtc key:", rtcKey);
       handleUpdatesFromBoardNode(
         whiteboardNode,
         currentSceneElements as NonDeletedExcalidrawElement[],
@@ -492,48 +488,12 @@ const ExcalidrawWrapper = ({
     }
 
     setTheme(appState.theme);
-
-    console.log("hitting on change with sessionId", sessionId);
-
     await handleChangesFromWhiteboard(
       whiteboardNode,
       { elements, appState },
       rtcKey as ISEAPair,
       sessionId,
     );
-    console.log("hitting benji");
-    // setPrevWhiteboardContent({ elements, appState });
-
-    // this check is redundant, but since this is a hot path, it's best
-    // not to evaludate the nested expression every time
-    // if (!LocalData.isSavePaused()) {
-    //   LocalData.save(elements, appState, files, () => {
-    //     if (excalidrawAPI) {
-    //       let didChange = false;
-
-    //       const elements = excalidrawAPI
-    //         .getSceneElementsIncludingDeleted()
-    //         .map((element) => {
-    //           if (
-    //             LocalData.fileStorage.shouldUpdateImageElementStatus(element)
-    //           ) {
-    //             const newElement = newElementWith(element, { status: "saved" });
-    //             if (newElement !== element) {
-    //               didChange = true;
-    //             }
-    //             return newElement;
-    //           }
-    //           return element;
-    //         });
-
-    //       if (didChange) {
-    //         excalidrawAPI.updateScene({
-    //           elements,
-    //         });
-    //       }
-    //     }
-    //   });
-    // }
   };
 
   const onExportToBackend = async (

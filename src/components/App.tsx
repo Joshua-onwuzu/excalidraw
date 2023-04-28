@@ -6216,7 +6216,6 @@ class App extends React.Component<AppProps, AppState> {
     event: MouseEvent | KeyboardEvent,
   ): void => {
     const draggingElement = this.state.draggingElement;
-    console.log("draggingElement", draggingElement);
     const pointerCoords = pointerDownState.lastCoords;
     if (!draggingElement) {
       return;

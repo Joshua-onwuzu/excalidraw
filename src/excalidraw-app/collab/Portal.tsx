@@ -37,8 +37,6 @@ class Portal {
     this.roomId = id;
     this.roomKey = key;
 
-    console.log(key, "roomkey from open socket");
-
     // Initialize socket listeners
     this.socket.on("init-room", () => {
       if (this.socket) {
@@ -87,10 +85,7 @@ class Portal {
     volatile: boolean = false,
   ) {
     if (this.isOpen()) {
-      console.log(data, "data from socket");
       const json = JSON.stringify(data);
-      console.log(json, "data from socket json");
-      console.log(this.roomKey, "hu goes this is this.roomKey")
       const encoded = new TextEncoder().encode(json);
       const { encryptedBuffer, iv } = await encryptData(this.roomKey!, encoded);
 
